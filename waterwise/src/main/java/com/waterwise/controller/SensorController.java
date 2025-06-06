@@ -6,6 +6,8 @@ import com.waterwise.repository.SensorIoTRepository;
 import com.waterwise.repository.LeituraSensorRepository;
 import com.waterwise.repository.TipoSensorRepository;
 import com.waterwise.service.PropriedadeRuralService;
+import com.waterwise.service.TipoSensorService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +32,9 @@ public class SensorController {
     private TipoSensorRepository tipoSensorRepository;
 
     @Autowired
+    private TipoSensorService tipoSensorService;
+
+    @Autowired
     private PropriedadeRuralService propriedadeService;
 
     @GetMapping
@@ -37,6 +42,7 @@ public class SensorController {
         try {
             // ✅ Usar o método seguro com tratamento de erro
             List<SensorIoT> sensores = sensorRepository.findAllWithRelacionamentos();
+            model.addAttribute("activeMenu", "sensores");
             model.addAttribute("sensores", sensores);
             model.addAttribute("totalSensores", sensores.size());
         } catch (Exception e) {
@@ -59,6 +65,7 @@ public class SensorController {
         LocalDateTime dataInicio = LocalDateTime.now().minusDays(7);
         List<LeituraSensor> leiturasRecentes = leituraRepository.findLeiturasPorPeriodo(id, dataInicio);
 
+        model.addAttribute("activeMenu", "sensores");
         model.addAttribute("sensor", sensor);
         model.addAttribute("leiturasRecentes", leiturasRecentes);
         model.addAttribute("ultimaLeitura", leituraRepository.findUltimaLeitura(id));
@@ -89,9 +96,11 @@ public class SensorController {
             sensor.setIdPropriedade(propriedadeId);
         }
 
+        model.addAttribute("activeMenu", "sensores");
         model.addAttribute("sensor", sensor);
         model.addAttribute("propriedades", propriedadeService.findAll());
-        model.addAttribute("tiposSensor", tipoSensorRepository.findTiposAtivos());
+        model.addAttribute("tiposSensores", tipoSensorService.findAll());
+        model.addAttribute("produtores", propriedadeService.findAllProdutores());
         model.addAttribute("propriedadeId", propriedadeId);
 
         return "sensores/form";
@@ -99,7 +108,7 @@ public class SensorController {
 
     @PostMapping
     public String salvar(@ModelAttribute SensorIoT sensor,
-                         RedirectAttributes redirectAttributes) {
+            RedirectAttributes redirectAttributes) {
         try {
             // Definir data de instalação se não informada
             if (sensor.getDataInstalacao() == null) {
@@ -127,11 +136,14 @@ public class SensorController {
             return "redirect:/admin/sensores?erro=nao-encontrado";
         }
 
+        model.addAttribute("activeMenu", "sensores");
         model.addAttribute("sensor", sensor);
         model.addAttribute("propriedades", propriedadeService.findAll());
-        model.addAttribute("tiposSensor", tipoSensorRepository.findTiposAtivos());
+        model.addAttribute("tiposSensores", tipoSensorService.findAll());
+        model.addAttribute("produtores", propriedadeService.findAllProdutores());
+        model.addAttribute("propriedadeId", sensor.getIdPropriedade());
 
-        return "sensores/form";
+        return "sensores/form"; // Reutiliza o mesmo formulário
     }
 
     @PostMapping("/{id}/excluir")

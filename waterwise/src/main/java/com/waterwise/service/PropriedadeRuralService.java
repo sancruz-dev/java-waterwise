@@ -56,7 +56,6 @@ public class PropriedadeRuralService {
         return propriedadeRepository.findByIdProdutor(idProdutor);
     }
 
-
     public PropriedadeRural save(PropriedadeRural propriedade) {
         // Debug para verificar os valores recebidos
         System.out.println("Salvando propriedade:");
@@ -91,7 +90,8 @@ public class PropriedadeRuralService {
         } else {
             // Verificar se o nível de degradação existe
             if (!nivelDegradacaoRepository.existsById(propriedade.getIdNivelDegradacao())) {
-                throw new IllegalArgumentException("Nível de degradação não encontrado com ID: " + propriedade.getIdNivelDegradacao());
+                throw new IllegalArgumentException(
+                        "Nível de degradação não encontrado com ID: " + propriedade.getIdNivelDegradacao());
             }
         }
 
@@ -134,7 +134,8 @@ public class PropriedadeRuralService {
                     Long sensorId = sensor.getIdSensor();
 
                     // 2.1. Buscar e excluir todas as leituras deste sensor
-                    List<LeituraSensor> leituras = leituraSensorRepository.findByIdSensorOrderByTimestampLeituraDesc(sensorId);
+                    List<LeituraSensor> leituras = leituraSensorRepository
+                            .findByIdSensorOrderByTimestampLeituraDesc(sensorId);
                     if (!leituras.isEmpty()) {
                         System.out.println("Excluindo " + leituras.size() + " leitura(s) do sensor ID: " + sensorId);
                         leituraSensorRepository.deleteAll(leituras);

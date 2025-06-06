@@ -28,23 +28,55 @@ public class TipoSensor {
     private BigDecimal valorMax;
 
     // Getters e Setters
-    public Long getIdTipoSensor() { return idTipoSensor; }
-    public void setIdTipoSensor(Long idTipoSensor) { this.idTipoSensor = idTipoSensor; }
+    public Long getIdTipoSensor() {
+        return idTipoSensor;
+    }
 
-    public String getNomeTipo() { return nomeTipo; }
-    public void setNomeTipo(String nomeTipo) { this.nomeTipo = nomeTipo; }
+    public void setIdTipoSensor(Long idTipoSensor) {
+        this.idTipoSensor = idTipoSensor;
+    }
 
-    public String getDescricao() { return descricao; }
-    public void setDescricao(String descricao) { this.descricao = descricao; }
+    public String getNomeTipo() {
+        return nomeTipo;
+    }
 
-    public String getUnidadeMedida() { return unidadeMedida; }
-    public void setUnidadeMedida(String unidadeMedida) { this.unidadeMedida = unidadeMedida; }
+    public void setNomeTipo(String nomeTipo) {
+        this.nomeTipo = nomeTipo;
+    }
 
-    public BigDecimal getValorMin() { return valorMin; }
-    public void setValorMin(BigDecimal valorMin) { this.valorMin = valorMin; }
+    public String getDescricao() {
+        return descricao;
+    }
 
-    public BigDecimal getValorMax() { return valorMax; }
-    public void setValorMax(BigDecimal valorMax) { this.valorMax = valorMax; }
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 
-    public String getStatusAtivo() { return "S"; }
+    public String getUnidadeMedida() {
+        return unidadeMedida;
+    }
+
+    public void setUnidadeMedida(String unidadeMedida) {
+        this.unidadeMedida = unidadeMedida;
+    }
+
+    public BigDecimal getValorMin() {
+        return valorMin;
+    }
+
+    public void setValorMin(BigDecimal valorMin) {
+        this.valorMin = valorMin;
+    }
+
+    public BigDecimal getValorMax() {
+        return valorMax;
+    }
+
+    public void setValorMax(BigDecimal valorMax) {
+        this.valorMax = valorMax;
+    }
+
+    public String getStatusAtivo() {
+        return "S";
+    }
 }

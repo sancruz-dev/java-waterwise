@@ -25,8 +25,8 @@ public class PropriedadeRuralController {
 
     @GetMapping
     public String listar(Model model,
-                         @RequestParam(required = false) String busca,
-                         @RequestParam(required = false) Integer nivelDegradacao) {
+            @RequestParam(required = false) String busca,
+            @RequestParam(required = false) Integer nivelDegradacao) {
 
         if (busca != null && !busca.trim().isEmpty()) {
             model.addAttribute("propriedades", propriedadeService.findByNome(busca));
@@ -35,6 +35,7 @@ public class PropriedadeRuralController {
             model.addAttribute("propriedades", propriedadeService.findAll());
         }
 
+        model.addAttribute("activeMenu", "propriedades");
         // Dados para filtros
         model.addAttribute("niveisDegradacao", propriedadeService.findAllNiveisDegradacao());
 
@@ -43,6 +44,7 @@ public class PropriedadeRuralController {
 
     @GetMapping("/novo")
     public String novoForm(Model model) {
+        model.addAttribute("activeMenu", "propriedades");
         model.addAttribute("propriedade", new PropriedadeRural());
         model.addAttribute("nivelDegradacao", propriedadeService.findAllNiveisDegradacao());
         model.addAttribute("produtores", propriedadeService.findAllProdutores());
@@ -56,6 +58,7 @@ public class PropriedadeRuralController {
             return "redirect:/admin/propriedades?erro=nao-encontrada";
         }
 
+        model.addAttribute("activeMenu", "propriedades");
         model.addAttribute("propriedade", propriedade);
 
         BigDecimal impactoRetencao = propriedadeService.calcularImpactoRetencaoHidrica(id);
@@ -77,12 +80,23 @@ public class PropriedadeRuralController {
             String statusCapacidade;
             int nivel = propriedade.getNivelDegradacao().getNivelNumerico();
             switch (nivel) {
-                case 1: statusCapacidade = "Excelente"; break;
-                case 2: statusCapacidade = "Bom"; break;
-                case 3: statusCapacidade = "Moderado"; break;
-                case 4: statusCapacidade = "Necessita Atenção"; break;
-                case 5: statusCapacidade = "Crítico"; break;
-                default: statusCapacidade = "Indefinido";
+                case 1:
+                    statusCapacidade = "Excelente";
+                    break;
+                case 2:
+                    statusCapacidade = "Bom";
+                    break;
+                case 3:
+                    statusCapacidade = "Moderado";
+                    break;
+                case 4:
+                    statusCapacidade = "Necessita Atenção";
+                    break;
+                case 5:
+                    statusCapacidade = "Crítico";
+                    break;
+                default:
+                    statusCapacidade = "Indefinido";
             }
             model.addAttribute("statusCapacidade", statusCapacidade);
         }
@@ -97,6 +111,7 @@ public class PropriedadeRuralController {
             return "redirect:/admin/propriedades?erro=nao-encontrada";
         }
 
+        model.addAttribute("activeMenu", "propriedades");
         model.addAttribute("propriedade", propriedade);
         model.addAttribute("nivelDegradacao", propriedadeService.findAllNiveisDegradacao());
         model.addAttribute("produtores", propriedadeService.findAllProdutores());
@@ -105,9 +120,9 @@ public class PropriedadeRuralController {
 
     @PostMapping
     public String salvar(@Valid @ModelAttribute PropriedadeRural propriedade,
-                         BindingResult result,
-                         Model model,
-                         RedirectAttributes redirectAttributes) {
+            BindingResult result,
+            Model model,
+            RedirectAttributes redirectAttributes) {
 
         if (result.hasErrors()) {
             model.addAttribute("nivelDegradacao", propriedadeService.findAllNiveisDegradacao());
@@ -167,7 +182,6 @@ public class PropriedadeRuralController {
 
         return "redirect:/admin/propriedades";
     }
-
 
     @GetMapping("/regiao/mairipora")
     public String propriedadesMairipora(Model model) {

@@ -29,11 +29,12 @@ public class AlertaController {
 
     @GetMapping
     public String listar(Model model,
-                         @RequestParam(required = false) String severidade,
-                         @RequestParam(required = false) Integer dias) {
+            @RequestParam(required = false) String severidade,
+            @RequestParam(required = false) Integer dias) {
 
         List<Alerta> alertas = alertaService.buscarAlertasComFiltros(severidade, dias, null);
 
+        model.addAttribute("activeMenu", "alertas");
         model.addAttribute("alertas", alertas);
         model.addAttribute("niveisSeveridade", nivelSeveridadeRepository.findAllOrdered());
         model.addAttribute("severidadeSelecionada", severidade);

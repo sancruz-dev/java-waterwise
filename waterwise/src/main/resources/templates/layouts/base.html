@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language ?: 'pt'}">
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      th:lang="${#locale.language ?: 'pt'}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:text="${pageTitle != null ? 'WaterWise - ' + pageTitle : 'WaterWise Dashboard'}">WaterWise Admin</title>
+    <title layout:title-pattern="$CONTENT_TITLE - WaterWise"></title>
     <meta name="description" content="Sistema de prevenção a enchentes">
 
     <!-- Bootstrap CSS -->
@@ -12,6 +14,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link th:href="@{/css/waterwise.css}" rel="stylesheet">
+    
+    <!-- CSS específico da página -->
+    <th:block layout:fragment="page-css"></th:block>
+    
     <style>
         .navbar-brand { font-weight: bold; }
         .card { box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); }
@@ -19,9 +25,11 @@
         .table th { font-weight: 600; }
         footer { margin-top: 60px; }
         .language-flag { width: 20px; height: 15px; margin-right: 8px; }
+        .is-warning {border-color: #ffc107 !important;}
     </style>
 </head>
 <body class="bg-light">
+
 <!-- Navbar WaterWise -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
     <div class="container-fluid">
@@ -39,7 +47,7 @@
             <ul class="navbar-nav me-auto">
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/admin/dashboard}"
-                       th:classappend="${#httpServletRequest.requestURI.contains('dashboard') ? 'active' : ''}"
+                       th:classappend="${activeMenu == 'dashboard' ? 'active' : ''}"
                        title="Dashboard principal">
                         <i class="bi bi-speedometer2 me-1"></i>
                         <span>Dashboard</span>
@@ -47,7 +55,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/admin/propriedades}"
-                       th:classappend="${#httpServletRequest.requestURI.contains('propriedades') ? 'active' : ''}"
+                       th:classappend="${activeMenu == 'propriedades' ? 'active' : ''}"
                        title="Gerenciar propriedades rurais">
                         <i class="bi bi-geo-alt me-1"></i>
                         <span>Propriedades Rurais</span>
@@ -55,13 +63,31 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/admin/relatorio-ia}"
+                       th:classappend="${activeMenu == 'relatorio-ia' ? 'active' : ''}"
                        title="Relatórios de inteligência artificial">
                         <i class="bi bi-robot me-1"></i>
                         <span>Relatórios IA</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/admin/propriedades/regiao/mairipora}"
+                    <a class="nav-link" th:href="@{/admin/sensores}"
+                       th:classappend="${activeMenu == 'sensores' ? 'active' : ''}"
+                       title="Gerenciar sensores IoT">
+                        <i class="bi bi-cpu me-1"></i>
+                        <span>Sensores IoT</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/alertas}"
+                       th:classappend="${activeMenu == 'alertas' ? 'active' : ''}"
+                       title="Sistema de alertas">
+                        <i class="bi bi-exclamation-triangle me-1"></i>
+                        <span>Alertas</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/admin/relatorio-regional}"
+                       th:classappend="${activeMenu == 'mairipora' ? 'active' : ''}"
                        title="Propriedades da região de Mairiporã">
                         <i class="bi bi-map me-1"></i>
                         <span>Região Mairiporã</span>
@@ -79,14 +105,10 @@
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-                        <a class="dropdown-item active" href="#">
-                            🇧🇷 Português
-                        </a>
+                        <a class="dropdown-item active" href="#">🇧🇷 Português</a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#">
-                            🇺🇸 English
-                        </a>
+                        <a class="dropdown-item" href="#">🇺🇸 English</a>
                     </li>
                 </ul>
             </div>
@@ -114,7 +136,7 @@
 </nav>
 
 <!-- Alert Messages -->
-<div class="container-fluid mt-3" th:if="${sucesso or erro}">
+<div class="container-fluid mt-3" th:if="${sucesso != null or erro != null}">
     <div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${sucesso}">
         <i class="bi bi-check-circle-fill me-2"></i>
         <span th:text="${sucesso}">Sucesso!</span>
@@ -130,7 +152,11 @@
 
 <!-- Main Content -->
 <main class="container-fluid mt-4" role="main">
-    <div th:replace="${contentTemplate}"></div>
+    <!-- Aqui é onde o conteúdo específico de cada página será inserido -->
+    <div layout:fragment="content">
+        <!-- Conteúdo padrão se nenhum for definido -->
+        <h1>Conteúdo não definido</h1>
+    </div>
 </main>
 
 <!-- Footer -->
@@ -161,16 +187,8 @@
 <!-- Custom JS -->
 <script th:src="@{/js/main.js}"></script>
 
-<!-- JavaScript -->
-<script>
-    // Mensagens JavaScript
-    window.i18n = {
-        'message.confirmacao': 'Confirmar operação?',
-        'message.loading': 'Carregando...',
-        'message.erro.conexao': 'Erro de conexão',
-        'action.confirmar': 'Confirmar',
-        'action.cancelar': 'Cancelar'
-    };
-</script>
+<!-- JavaScript específico da página -->
+<th:block layout:fragment="page-scripts"></th:block>
+
 </body>
 </html>

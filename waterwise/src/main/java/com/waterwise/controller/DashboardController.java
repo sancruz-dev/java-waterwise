@@ -28,20 +28,20 @@ public class DashboardController {
     @Autowired(required = false)
     private RelatorioIAService relatorioIAService;
 
-    @GetMapping({"/", "/dashboard"})
+    @GetMapping({ "/", "/dashboard" })
     public String dashboard(Model model) {
         System.out.println("🚀 === INICIANDO DASHBOARD === 🚀");
 
         try {
+            model.addAttribute("activeMenu", "dashboard");
+
             // Obter estatísticas
             Map<String, Object> stats;
             if (dashboardService != null) {
                 try {
                     stats = dashboardService.obterEstatisticasDashboard();
                     System.out.println("✅ Estatísticas obtidas com sucesso");
-                    stats.forEach((key, value) ->
-                            System.out.println("  📊 " + key + ": " + value)
-                    );
+                    stats.forEach((key, value) -> System.out.println("  📊 " + key + ": " + value));
                 } catch (Exception e) {
                     System.err.println("❌ Erro ao obter estatísticas: " + e.getMessage());
                     stats = criarEstatisticasPadrao();
@@ -100,6 +100,8 @@ public class DashboardController {
         System.out.println("🤖 Carregando relatório IA...");
 
         try {
+            model.addAttribute("activeMenu", "relatorio-ia");
+
             // Verificar se IA está disponível
             if (relatorioIAService == null) {
                 model.addAttribute("erro", "Serviço de IA não está disponível. Verifique se o Ollama está rodando.");
@@ -151,10 +153,11 @@ public class DashboardController {
                 model.addAttribute("estatisticas", criarEstatisticasPadrao());
                 return "dashboard/relatorio-regional";
             }
+            model.addAttribute("activeMenu", "mairipora");
 
             // Obter estatísticas regionais
-            Map<String, Object> stats = dashboardService != null ?
-                    dashboardService.obterEstatisticasDashboard() : criarEstatisticasPadrao();
+            Map<String, Object> stats = dashboardService != null ? dashboardService.obterEstatisticasDashboard()
+                    : criarEstatisticasPadrao();
             model.addAttribute("estatisticas", stats);
 
             try {
@@ -186,57 +189,57 @@ public class DashboardController {
         try {
             if (relatorioIAService == null) {
                 return """
-                    ❌ TESTE OLLAMA - FALHOU
-                    
-                    Motivo: RelatorioIAService não está disponível
-                    
-                    📋 VERIFICAÇÕES:
-                    • Verifique se a dependência spring-ai-ollama-spring-boot-starter está no pom.xml
-                    • Verifique as configurações no application.properties
-                    • Reinicie a aplicação
-                    
-                    🔧 CONFIGURAÇÃO NECESSÁRIA:
-                    spring.ai.ollama.base-url=http://localhost:11434
-                    spring.ai.ollama.chat.options.model=gemma:2b
-                    """;
+                        ❌ TESTE OLLAMA - FALHOU
+
+                        Motivo: RelatorioIAService não está disponível
+
+                        📋 VERIFICAÇÕES:
+                        • Verifique se a dependência spring-ai-ollama-spring-boot-starter está no pom.xml
+                        • Verifique as configurações no application.properties
+                        • Reinicie a aplicação
+
+                        🔧 CONFIGURAÇÃO NECESSÁRIA:
+                        spring.ai.ollama.base-url=http://localhost:11434
+                        spring.ai.ollama.chat.options.model=gemma:2b
+                        """;
             }
 
             String resultado = relatorioIAService.gerarRecomendacoesPrioritarias();
             System.out.println("✅ Teste Ollama realizado com sucesso");
 
             return """
-                🤖 TESTE OLLAMA GEMMA:2B - SUCESSO! ✅
-                
-                Status: Funcionando corretamente
-                Modelo: gemma:2b
-                Endpoint: http://localhost:11434
-                
-                📊 RESULTADO DO TESTE:
-                ────────────────────────────────────
-                """ + resultado;
+                    🤖 TESTE OLLAMA GEMMA:2B - SUCESSO! ✅
+
+                    Status: Funcionando corretamente
+                    Modelo: gemma:2b
+                    Endpoint: http://localhost:11434
+
+                    📊 RESULTADO DO TESTE:
+                    ────────────────────────────────────
+                    """ + resultado;
 
         } catch (Exception e) {
             System.err.println("❌ Erro no teste Ollama: " + e.getMessage());
 
             return String.format("""
-                ❌ TESTE OLLAMA - FALHOU
-                
-                Erro: %s
-                Classe: %s
-                
-                📋 VERIFICAÇÕES NECESSÁRIAS:
-                • Ollama instalado e rodando: ollama serve
-                • Modelo baixado: ollama pull gemma:2b
-                • Verificar modelos: ollama list
-                • Testar modelo: ollama run gemma:2b "teste"
-                
-                🔧 COMANDOS ÚTEIS:
-                1. ollama serve (iniciar Ollama)
-                2. ollama pull gemma:2b (baixar modelo)
-                3. curl http://localhost:11434/api/tags (verificar API)
-                
-                📝 LOGS: Verifique os logs da aplicação para mais detalhes
-                """, e.getMessage(), e.getClass().getSimpleName());
+                    ❌ TESTE OLLAMA - FALHOU
+
+                    Erro: %s
+                    Classe: %s
+
+                    📋 VERIFICAÇÕES NECESSÁRIAS:
+                    • Ollama instalado e rodando: ollama serve
+                    • Modelo baixado: ollama pull gemma:2b
+                    • Verificar modelos: ollama list
+                    • Testar modelo: ollama run gemma:2b "teste"
+
+                    🔧 COMANDOS ÚTEIS:
+                    1. ollama serve (iniciar Ollama)
+                    2. ollama pull gemma:2b (baixar modelo)
+                    3. curl http://localhost:11434/api/tags (verificar API)
+
+                    📝 LOGS: Verifique os logs da aplicação para mais detalhes
+                    """, e.getMessage(), e.getClass().getSimpleName());
         }
     }
 
@@ -284,7 +287,8 @@ public class DashboardController {
             if (relatorioIAService != null) {
                 // Teste de conectividade
                 String teste = relatorioIAService.gerarRecomendacoesPrioritarias();
-                return "✅ IA recarregada com sucesso!\n\nTeste: " + teste.substring(0, Math.min(200, teste.length())) + "...";
+                return "✅ IA recarregada com sucesso!\n\nTeste: " + teste.substring(0, Math.min(200, teste.length()))
+                        + "...";
             } else {
                 return "❌ Serviço de IA não está disponível. Reinicie a aplicação.";
             }

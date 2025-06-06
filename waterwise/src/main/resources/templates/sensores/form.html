@@ -1,28 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/base}">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Novo Sensor IoT - WaterWise</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+  <title th:text="${sensor.idSensor != null ? 'Editar Sensor IoT' : 'Novo Sensor IoT'}">
 </head>
-<body class="bg-light">
 
-<!-- Navbar WaterWise -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/admin/dashboard">
-      <i class="bi bi-droplet-fill me-2"></i>
-      WaterWise Admin
-    </a>
-    <div class="navbar-nav ms-auto">
-      <a class="nav-link" href="/logout">Sair</a>
-    </div>
-  </div>
-</nav>
-
-<main class="container-fluid mt-4">
+<div layout:fragment="content">
   <!-- Page Header -->
   <div class="row mb-4">
     <div class="col">
@@ -30,14 +14,14 @@
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
           <li class="breadcrumb-item"><a href="/admin/sensores">Sensores IoT</a></li>
-          <li class="breadcrumb-item active">Novo Sensor</li>
+          <li class="breadcrumb-item active" th:text="${sensor.idSensor != null ? 'Editar' : 'Novo Sensor'}">
         </ol>
       </nav>
       <h1 class="h2 text-primary">
         <i class="bi bi-cpu me-2"></i>
-        Cadastrar Novo Sensor IoT
+        <span th:text="${sensor.idSensor != null ? 'Atualizar Sensor IoT' : 'Cadastrar Novo Sensor IoT'}"></span>
       </h1>
-      <p class="text-muted">
+      <p class="text-muted" th:if="!${sensor.idSensor}">
         Configure um novo dispositivo de monitoramento para coleta de dados ambientais
       </p>
     </div>
@@ -60,11 +44,12 @@
               <div class="col-md-6 mb-3">
                 <label for="idPropriedade" class="form-label">Propriedade Rural *</label>
                 <select class="form-select" id="idPropriedade" name="idPropriedade" required>
-                  <option value="">Selecione uma propriedade</option>
-                  <!-- Propriedades serão carregadas do backend -->
-                  <option value="1">Fazenda Verde Águas - José Silva</option>
-                  <option value="2">Sítio Esperança - Maria Santos</option>
-                  <option value="3">Fazenda São João - Carlos Lima</option>
+                    <option value="">Selecione uma propriedade</option>
+                    <option th:each="propriedade : ${propriedades}"
+                            th:value="${propriedade.idPropriedade}"
+                            th:text="${propriedade.nomePropriedade} + ' - ' + ${propriedade.produtor?.nomeCompleto ?: 'Não informado'}"
+                            th:selected="${sensor.idPropriedade != null and sensor.idPropriedade == propriedade.idPropriedade}">
+                    </option>
                 </select>
                 <small class="form-text text-muted">
                   Propriedade onde o sensor será instalado
@@ -74,15 +59,21 @@
                 <label for="idTipoSensor" class="form-label">Tipo de Sensor *</label>
                 <select class="form-select" id="idTipoSensor" name="idTipoSensor" required>
                   <option value="">Selecione o tipo</option>
-                  <option value="1" data-unidade="%" data-desc="Monitora umidade do solo">
-                    💧 UMIDADE_SOLO (%)
-                  </option>
-                  <option value="2" data-unidade="°C" data-desc="Monitora temperatura ambiente">
-                    🌡️ TEMPERATURA_AR (°C)
-                  </option>
-                  <option value="3" data-unidade="mm" data-desc="Monitora precipitação">
-                    🌧️ PRECIPITACAO_MM (mm)
-                  </option>
+                    <option th:each="tipoSensor : ${tiposSensores}"
+                            th:value="${tipoSensor.idTipoSensor}"
+                            th:text="${tipoSensor.nomeTipo}"
+                            th:selected="${sensor.idTipoSensor != null and sensor.idTipoSensor == tipoSensor.idTipoSensor}"
+                    >
+                    </option>
+                    <option value="1" data-unidade="%" data-desc="Monitora umidade do solo">
+                      💧 UMIDADE_SOLO (%)
+                    </option>
+                    <option value="2" data-unidade="°C" data-desc="Monitora temperatura ambiente">
+                      🌡️ TEMPERATURA_AR (°C)
+                    </option>
+                    <option value="3" data-unidade="mm" data-desc="Monitora precipitação">
+                      🌧️ PRECIPITACAO_MM (mm)
+                    </option>
                 </select>
                 <small class="form-text text-muted" id="tipoDesc">
                   Tipo de medição que o sensor realizará
@@ -95,17 +86,19 @@
                 <label for="modeloDispositivo" class="form-label">Modelo do Dispositivo</label>
                 <input type="text" class="form-control" id="modeloDispositivo"
                        name="modeloDispositivo"
-                       placeholder="Ex: WaterWise-UM-2024-A1">
+                       placeholder="Ex: WaterWise-UM-2024-A1"
+                       th:value="${sensor.modeloDispositivo}"
+                >
                 <small class="form-text text-muted">
                   Identificação do modelo/versão do sensor
                 </small>
               </div>
               <div class="col-md-4 mb-3">
                 <label for="dataInstalacao" class="form-label">Data de Instalação</label>
-                <input type="datetime-local" class="form-control" id="dataInstalacao"
-                       name="dataInstalacao">
+                <input type="datetime-local" class="form-control" id="dataInstalacao" name="dataInstalacao"
+                value="2025-05-01T11:30">
                 <small class="form-text text-muted">
-                  Deixe vazio para usar data atual
+                    Deixe vazio para usar data atual
                 </small>
               </div>
             </div>
@@ -155,7 +148,7 @@
               </div>
             </div>
 
-            <div class="alert alert-info border-0">
+            <div class="alert alert-info border-0" th:if="!${sensor.idSensor}">
               <i class="bi bi-lightbulb me-2"></i>
               <strong>Dica:</strong> Após a instalação, o sensor começará a enviar dados automaticamente.
               Monitore os primeiros dados para verificar se está funcionando corretamente.
@@ -180,7 +173,7 @@
                 </button>
                 <button type="submit" class="btn btn-success">
                   <i class="bi bi-check-circle me-1"></i>
-                  Cadastrar Sensor
+                  <span th:text="${sensor.idSensor != null ? 'Atualizar Sensor IoT' : 'Cadastrar Sensor'}" />
                 </button>
               </div>
             </div>
@@ -276,11 +269,12 @@
       </div>
     </div>
   </div>
-</main>
+</div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
+<th:block layout:fragment="page-scripts">
 <script>
+  
+
   // Atualizar preview quando mudar o tipo de sensor
   document.getElementById('idTipoSensor').addEventListener('change', function() {
     const selectedOption = this.options[this.selectedIndex];
@@ -355,6 +349,5 @@
     }
   }
 </script>
-
-</body>
+</th:block>
 </html>
