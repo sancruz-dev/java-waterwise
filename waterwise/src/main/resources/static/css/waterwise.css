@@ -51,6 +51,12 @@ body {
     background-color: #f8f9fa;
 }
 
+
+.badge-custom { font-size: 0.75em; }
+footer { margin-top: 60px; }
+.language-flag { width: 20px; height: 15px; margin-right: 8px; }
+.is-warning {border-color: #ffc107 !important;}
+
 /* Navbar WaterWise */
 .navbar-brand {
     font-weight: 700;

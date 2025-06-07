@@ -9,8 +9,8 @@
 
 <div layout:fragment="content">
     <!-- Page Header -->
-    <div class="row mb-4">
-        <div class="col">
+    <div class="d-flex justify-content-between mb-4">
+        <div>
             <h1 class="h2 text-primary">
                 <i class="bi bi-speedometer2 me-2"></i>
                 <span th:text="#{dashboard.titulo}">Dashboard de Monitoramento WaterWise</span>
@@ -18,6 +18,37 @@
             <p class="text-muted" th:text="#{dashboard.descricao}">
                 Visão geral do sistema de prevenção a enchentes em Mairiporã-SP
             </p>
+        </div>
+        
+        <!-- Ações Rápidas -->
+        <div>
+            <div class="col-auto">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white border-0">
+                        <h5 class="card-title mb-0 text-primary">
+                            <i class="bi bi-lightning text-warning me-2"></i>
+                            <span th:text="#{dashboard.acoes.rapidas}">Ações Rápidas</span>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            
+                            <div class="col-auto">
+                                <a th:href="@{/admin/propriedades/novo}" class="btn btn-success">
+                                    <i class="bi bi-plus-circle me-1"></i>
+                                    <span th:text="#{propriedades.nova}"></span>
+                                </a>
+                            </div>
+                            <div class="col-auto">
+                                <a th:href="@{/admin/propriedades}" class="btn btn-primary">
+                                    <i class="bi bi-list me-1"></i>
+                                    <span th:text="#{propriedades.listar}"></span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -117,8 +148,6 @@
                                     <div>
                                         <strong th:text="${prop.nomePropriedade}">Fazenda Exemplo</strong>
                                         <br>
-                                        <small class="text-muted" th:text="${prop.tipoSolo}" th:if="${prop.tipoSolo}">Latossolo</small>
-                                        <small class="text-muted" th:text="#{msg.nao.informado}" th:if="!${prop.tipoSolo}">Latossolo</small>
                                     </div>
                                 </td>
                                 <td class="text-center">
@@ -133,7 +162,8 @@
                                         <span class="text-success fw-bold"
                                               th:text="|${#numbers.formatDecimal(prop.nivelDegradacao.capacidadeAbsorcaoPercentual, 1, 1)}%|">45.2%</span>
                                         <br>
-                                        <small class="text-muted" th:text="${prop.nivelDegradacao.codigoDegradacao ?: 'N/A'}">MODERADO</small>
+                                        <small class="text-muted" th:text="#{__${#strings.toLowerCase('nivel.' + (prop.nivelDegradacao.codigoDegradacao ?: 'moderado'))}__}">MODERADO</small>
+                                        <!-- <small class="text-muted" th:text="${prop.nivelDegradacao.codigoDegradacao ?: 'N/A'}">MODERADO</small> -->
                                     </div>
                                     <span th:unless="${prop.nivelDegradacao?.capacidadeAbsorcaoPercentual != null}" class="text-muted">N/A</span>
                                 </td>
@@ -159,60 +189,6 @@
         </div>
 
     </div>
-
-    <!-- Ações Rápidas -->
-    <!-- <div class="row">
-        <div class="col-12">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0">
-                    <h5 class="card-title mb-0 text-primary">
-                        <i class="bi bi-lightning text-warning me-2"></i>
-                        <span th:text="#{dashboard.acoes.rapidas}">Ações Rápidas</span>
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="row g-3">
-                        <div class="col-lg-3 col-md-6">
-                            <a th:href="@{/admin/propriedades/novo}" class="btn btn-success w-100 py-3">
-                                <i class="bi bi-plus-circle me-2"></i>
-                                <div>
-                                    <span th:text="#{propriedades.nova}">Nova Propriedade Rural</span>
-                                    <br><small th:text="#{propriedades.gerenciamento}">Gerenciamento de propriedades rurais monitoradas</small>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <a th:href="@{/admin/propriedades}" class="btn btn-primary w-100 py-3">
-                                <i class="bi bi-list me-2"></i>
-                                <div>
-                                    Listar Propriedades
-                                    <br><small th:text="#{propriedades.titulo}">Lista de Propriedades Rurais</small>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <a th:href="@{/admin/relatorio-ia}" class="btn btn-info w-100 py-3">
-                                <i class="bi bi-robot me-2"></i>
-                                <div>
-                                    <span th:text="#{nav.relatorio.ia}">Relatório de IA</span>
-                                    <br><small th:text="#{ia.descricao}">Análises automáticas para otimização da retenção hídrica</small>
-                                </div>
-                            </a>
-                        </div>
-                        <div class="col-lg-3 col-md-6">
-                            <a th:href="@{/admin/propriedades/regiao/mairipora}" class="btn btn-outline-secondary w-100 py-3">
-                                <i class="bi bi-map me-2"></i>
-                                <div>
-                                    <span th:text="#{nav.regiao.mairipora}">Região de Mairiporã</span>
-                                    <br><small th:text="#{dashboard.sistema.propriedades.monitoradas.regiao}">Propriedades monitoradas na região</small>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
 </div>
 
 </html>

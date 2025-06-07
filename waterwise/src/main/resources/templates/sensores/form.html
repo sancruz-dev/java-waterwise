@@ -3,7 +3,7 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/base}">
 <head>
-  <title th:text="${sensor.idSensor != null ? 'Editar Sensor IoT' : 'Novo Sensor IoT'}">
+  <title th:text="${sensor.idSensor != null ? 'Editar Sensor IoT' : 'Novo Sensor IoT'} + ' - WaterWise'">Novo Sensor IoT - WaterWise</title>
 </head>
 
 <div layout:fragment="content">
@@ -12,17 +12,21 @@
     <div class="col">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
-          <li class="breadcrumb-item"><a href="/admin/sensores">Sensores IoT</a></li>
+          <li class="breadcrumb-item"><a th:href="@{/admin/dashboard}">Dashboard</a></li>
+          <li class="breadcrumb-item"><a th:href="@{/admin/sensores}">Sensores IoT</a></li>
           <li class="breadcrumb-item active" th:text="${sensor.idSensor != null ? 'Editar' : 'Novo Sensor'}">
+            Novo Sensor
+          </li>
         </ol>
       </nav>
       <h1 class="h2 text-primary">
         <i class="bi bi-cpu me-2"></i>
-        <span th:text="${sensor.idSensor != null ? 'Atualizar Sensor IoT' : 'Cadastrar Novo Sensor IoT'}"></span>
+        <span th:text="${sensor.idSensor != null ? 'Editar Sensor IoT' : 'Novo Sensor IoT'}">
+          Novo Sensor IoT
+        </span>
       </h1>
-      <p class="text-muted" th:if="!${sensor.idSensor}">
-        Configure um novo dispositivo de monitoramento para coleta de dados ambientais
+      <p class="text-muted">
+        Gerenciamento de sensores IoT para monitoramento ambiental
       </p>
     </div>
   </div>
@@ -30,7 +34,9 @@
   <div class="row">
     <!-- Formulário Principal -->
     <div class="col-lg-8">
-      <form action="/admin/sensores" method="post">
+      <form th:action="@{/admin/sensores}" th:object="${sensor}" method="post">
+        <input type="hidden" th:field="*{idSensor}" />
+        
         <!-- Informações Básicas -->
         <div class="card border-0 shadow-sm mb-4">
           <div class="card-header bg-white border-0">
@@ -43,38 +49,44 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="idPropriedade" class="form-label">Propriedade Rural *</label>
-                <select class="form-select" id="idPropriedade" name="idPropriedade" required>
-                    <option value="">Selecione uma propriedade</option>
-                    <option th:each="propriedade : ${propriedades}"
-                            th:value="${propriedade.idPropriedade}"
-                            th:text="${propriedade.nomePropriedade} + ' - ' + ${propriedade.produtor?.nomeCompleto ?: 'Não informado'}"
-                            th:selected="${sensor.idPropriedade != null and sensor.idPropriedade == propriedade.idPropriedade}">
-                    </option>
+                <select class="form-select" id="idPropriedade" 
+                        th:field="*{idPropriedade}"
+                        th:classappend="${#fields.hasErrors('idPropriedade')} ? 'is-invalid' : ''"
+                        required>
+                  <option value="">Selecione uma propriedade</option>
+                  <option th:each="propriedade : ${propriedades}"
+                          th:value="${propriedade.idPropriedade}"
+                          th:text="${propriedade.nomePropriedade} + ' - ' + ${propriedade.produtor?.nomeCompleto ?: 'Não informado'}">
+                  </option>
                 </select>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('idPropriedade')}"
+                     th:errors="*{idPropriedade}">
+                  Selecione uma propriedade
+                </div>
                 <small class="form-text text-muted">
                   Propriedade onde o sensor será instalado
                 </small>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="idTipoSensor" class="form-label">Tipo de Sensor *</label>
-                <select class="form-select" id="idTipoSensor" name="idTipoSensor" required>
+                <select class="form-select" id="idTipoSensor" 
+                        th:field="*{idTipoSensor}"
+                        th:classappend="${#fields.hasErrors('idTipoSensor')} ? 'is-invalid' : ''"
+                        required>
                   <option value="">Selecione o tipo</option>
-                    <option th:each="tipoSensor : ${tiposSensores}"
-                            th:value="${tipoSensor.idTipoSensor}"
-                            th:text="${tipoSensor.nomeTipo}"
-                            th:selected="${sensor.idTipoSensor != null and sensor.idTipoSensor == tipoSensor.idTipoSensor}"
-                    >
-                    </option>
-                    <option value="1" data-unidade="%" data-desc="Monitora umidade do solo">
-                      💧 UMIDADE_SOLO (%)
-                    </option>
-                    <option value="2" data-unidade="°C" data-desc="Monitora temperatura ambiente">
-                      🌡️ TEMPERATURA_AR (°C)
-                    </option>
-                    <option value="3" data-unidade="mm" data-desc="Monitora precipitação">
-                      🌧️ PRECIPITACAO_MM (mm)
-                    </option>
+                  <option th:each="tipoSensor : ${tiposSensores}"
+                          th:value="${tipoSensor.idTipoSensor}"
+                          th:text="${tipoSensor.nomeTipo}"
+                          th:data-unidade="${tipoSensor.unidadeMedida}"
+                          th:data-desc="${tipoSensor.descricao}"
+                          th:data-min="${tipoSensor.valorMin}"
+                          th:data-max="${tipoSensor.valorMax}">
+                  </option>
                 </select>
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('idTipoSensor')}"
+                     th:errors="*{idTipoSensor}">
+                  Selecione um tipo de sensor
+                </div>
                 <small class="form-text text-muted" id="tipoDesc">
                   Tipo de medição que o sensor realizará
                 </small>
@@ -85,20 +97,28 @@
               <div class="col-md-8 mb-3">
                 <label for="modeloDispositivo" class="form-label">Modelo do Dispositivo</label>
                 <input type="text" class="form-control" id="modeloDispositivo"
-                       name="modeloDispositivo"
+                       th:field="*{modeloDispositivo}"
                        placeholder="Ex: WaterWise-UM-2024-A1"
-                       th:value="${sensor.modeloDispositivo}"
-                >
+                       th:classappend="${#fields.hasErrors('modeloDispositivo')} ? 'is-invalid' : ''">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('modeloDispositivo')}"
+                     th:errors="*{modeloDispositivo}">
+                  Erro no modelo do dispositivo
+                </div>
                 <small class="form-text text-muted">
                   Identificação do modelo/versão do sensor
                 </small>
               </div>
               <div class="col-md-4 mb-3">
                 <label for="dataInstalacao" class="form-label">Data de Instalação</label>
-                <input type="datetime-local" class="form-control" id="dataInstalacao" name="dataInstalacao"
-                value="2025-05-01T11:30">
+                <input type="datetime-local" class="form-control" id="dataInstalacao" 
+                       th:field="*{dataInstalacao}"
+                       th:classappend="${#fields.hasErrors('dataInstalacao')} ? 'is-invalid' : ''">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('dataInstalacao')}"
+                     th:errors="*{dataInstalacao}">
+                  Data inválida
+                </div>
                 <small class="form-text text-muted">
-                    Deixe vazio para usar data atual
+                  Deixe vazio para usar data atual
                 </small>
               </div>
             </div>
@@ -161,7 +181,7 @@
           <div class="card-body">
             <div class="d-flex justify-content-between">
               <div>
-                <a href="/admin/sensores" class="btn btn-outline-secondary">
+                <a th:href="@{/admin/sensores}" class="btn btn-outline-secondary">
                   <i class="bi bi-arrow-left me-1"></i>
                   Voltar
                 </a>
@@ -173,7 +193,9 @@
                 </button>
                 <button type="submit" class="btn btn-success">
                   <i class="bi bi-check-circle me-1"></i>
-                  <span th:text="${sensor.idSensor != null ? 'Atualizar Sensor IoT' : 'Cadastrar Sensor'}" />
+                  <span th:text="${sensor.idSensor != null ? 'Atualizar' : 'Cadastrar'} + ' Sensor'">
+                    Cadastrar Sensor
+                  </span>
                 </button>
               </div>
             </div>
@@ -273,64 +295,57 @@
 
 <th:block layout:fragment="page-scripts">
 <script>
-  
-
   // Atualizar preview quando mudar o tipo de sensor
   document.getElementById('idTipoSensor').addEventListener('change', function() {
     const selectedOption = this.options[this.selectedIndex];
     const unidade = selectedOption.getAttribute('data-unidade');
     const desc = selectedOption.getAttribute('data-desc');
+    const valorMin = selectedOption.getAttribute('data-min');
+    const valorMax = selectedOption.getAttribute('data-max');
     const tipoTexto = selectedOption.textContent;
 
     const preview = document.getElementById('sensorPreview');
     const tipoDesc = document.getElementById('tipoDesc');
     const unidadeMedida = document.getElementById('unidadeMedida');
+    const inputMin = document.getElementById('valorMin');
+    const inputMax = document.getElementById('valorMax');
 
     if (unidade && desc) {
       preview.innerHTML = `
-                <i class="bi bi-cpu display-1 text-success mb-3"></i>
-                <h6 class="text-success">${tipoTexto}</h6>
-                <p class="text-muted small mb-0">${desc}</p>
-            `;
+        <i class="bi bi-cpu display-1 text-success mb-3"></i>
+        <h6 class="text-success">${tipoTexto}</h6>
+        <p class="text-muted small mb-0">${desc}</p>
+      `;
       tipoDesc.textContent = desc;
-      unidadeMedida.textContent = unidade;
-
-      // Configurar faixas de operação
-      const valorMin = document.getElementById('valorMin');
-      const valorMax = document.getElementById('valorMax');
-
-      switch(this.value) {
-        case '1': // Umidade
-          valorMin.value = '0';
-          valorMax.value = '100';
-          break;
-        case '2': // Temperatura
-          valorMin.value = '-10';
-          valorMax.value = '50';
-          break;
-        case '3': // Precipitação
-          valorMin.value = '0';
-          valorMax.value = '200';
-          break;
-      }
+      unidadeMedida.textContent = unidade || '-';
+      inputMin.value = valorMin || '';
+      inputMax.value = valorMax || '';
     } else {
       preview.innerHTML = `
-                <i class="bi bi-cpu display-1 text-muted opacity-25 mb-3"></i>
-                <h6 class="text-muted">Selecione o tipo de sensor</h6>
-                <p class="text-muted small mb-0">As especificações aparecerão aqui</p>
-            `;
+        <i class="bi bi-cpu display-1 text-muted opacity-25 mb-3"></i>
+        <h6 class="text-muted">Selecione o tipo de sensor</h6>
+        <p class="text-muted small mb-0">As especificações aparecerão aqui</p>
+      `;
       tipoDesc.textContent = 'Tipo de medição que o sensor realizará';
       unidadeMedida.textContent = '-';
-      valorMin.value = '';
-      valorMax.value = '';
+      inputMin.value = '';
+      inputMax.value = '';
     }
   });
 
-  // Definir data atual como padrão
+  // Definir data atual como padrão se for um novo sensor
   document.addEventListener('DOMContentLoaded', function() {
-    const agora = new Date();
-    agora.setMinutes(agora.getMinutes() - agora.getTimezoneOffset());
-    document.getElementById('dataInstalacao').value = agora.toISOString().slice(0, 16);
+    const dataInstalacao = document.getElementById('dataInstalacao');
+    
+    // Só define data atual se for um novo sensor (campo vazio)
+    if (!dataInstalacao.value) {
+      const agora = new Date();
+      agora.setMinutes(agora.getMinutes() - agora.getTimezoneOffset());
+      dataInstalacao.value = agora.toISOString().slice(0, 16);
+    }
+
+    // Trigger para carregar preview se já tem tipo selecionado (edição)
+    document.getElementById('idTipoSensor').dispatchEvent(new Event('change'));
   });
 
   // Resetar formulário
@@ -342,10 +357,10 @@
       document.getElementById('dataInstalacao').value = agora.toISOString().slice(0, 16);
 
       document.getElementById('sensorPreview').innerHTML = `
-                <i class="bi bi-cpu display-1 text-muted opacity-25 mb-3"></i>
-                <h6 class="text-muted">Selecione o tipo de sensor</h6>
-                <p class="text-muted small mb-0">As especificações aparecerão aqui</p>
-            `;
+        <i class="bi bi-cpu display-1 text-muted opacity-25 mb-3"></i>
+        <h6 class="text-muted">Selecione o tipo de sensor</h6>
+        <p class="text-muted small mb-0">As especificações aparecerão aqui</p>
+      `;
     }
   }
 </script>

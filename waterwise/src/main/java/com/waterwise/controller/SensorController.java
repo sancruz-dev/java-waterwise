@@ -8,9 +8,11 @@ import com.waterwise.repository.TipoSensorRepository;
 import com.waterwise.service.PropriedadeRuralService;
 import com.waterwise.service.TipoSensorService;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -40,7 +42,6 @@ public class SensorController {
     @GetMapping
     public String listar(Model model) {
         try {
-            // ✅ Usar o método seguro com tratamento de erro
             List<SensorIoT> sensores = sensorRepository.findAllWithRelacionamentos();
             model.addAttribute("activeMenu", "sensores");
             model.addAttribute("sensores", sensores);
@@ -106,29 +107,6 @@ public class SensorController {
         return "sensores/form";
     }
 
-    @PostMapping
-    public String salvar(@ModelAttribute SensorIoT sensor,
-            RedirectAttributes redirectAttributes) {
-        try {
-            // Definir data de instalação se não informada
-            if (sensor.getDataInstalacao() == null) {
-                sensor.setDataInstalacao(LocalDateTime.now());
-            }
-
-            SensorIoT sensorSalvo = sensorRepository.save(sensor);
-
-            redirectAttributes.addFlashAttribute("sucesso",
-                    "Sensor IoT #" + sensorSalvo.getIdSensor() + " cadastrado com sucesso!");
-
-            return "redirect:/admin/sensores/" + sensorSalvo.getIdSensor();
-
-        } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("erro",
-                    "Erro ao salvar sensor: " + e.getMessage());
-            return "redirect:/admin/sensores/novo";
-        }
-    }
-
     @GetMapping("/{id}/editar")
     public String editarForm(@PathVariable Long id, Model model) {
         SensorIoT sensor = sensorRepository.findById(id).orElse(null);
@@ -144,6 +122,43 @@ public class SensorController {
         model.addAttribute("propriedadeId", sensor.getIdPropriedade());
 
         return "sensores/form"; // Reutiliza o mesmo formulário
+    }
+
+    @PostMapping
+    public String salvar(@Valid @ModelAttribute SensorIoT sensor,
+            BindingResult result,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+
+        if (result.hasErrors()) {
+            model.addAttribute("propriedades", propriedadeService.findAll());
+            model.addAttribute("tiposSensores", tipoSensorService.findAll());
+            model.addAttribute("produtores", propriedadeService.findAllProdutores());
+            return "sensores/form";
+        }
+
+        System.out.println("ID Propriedade recebido: " + sensor.getIdPropriedade());
+        System.out.println("ID Tipo Sensor recebido: " + sensor.getIdTipoSensor());
+
+        try {
+            // Definir data de instalação se não informada
+            if (sensor.getDataInstalacao() == null) {
+                sensor.setDataInstalacao(LocalDateTime.now());
+            }
+
+            SensorIoT sensorSalvo = sensorRepository.save(sensor);
+
+            String acao = sensor.getIdSensor() != null ? "atualizado" : "cadastrado";
+            redirectAttributes.addFlashAttribute("sucesso",
+                    "Sensor IoT #" + sensorSalvo.getIdSensor() + " " + acao + " com sucesso!");
+
+            return "redirect:/admin/sensores/" + sensorSalvo.getIdSensor();
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("erro",
+                    "Erro ao salvar sensor: " + e.getMessage());
+            return "redirect:/admin/sensores/novo";
+        }
     }
 
     @PostMapping("/{id}/excluir")

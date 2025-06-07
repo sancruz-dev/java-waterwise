@@ -19,15 +19,68 @@
     <!-- CSS específico da página -->
     <th:block layout:fragment="page-css"></th:block>
     
-    <style>
-        .navbar-brand { font-weight: bold; }
-        .card { box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075); }
-        .badge-custom { font-size: 0.75em; }
-        .table th { font-weight: 600; }
-        footer { margin-top: 60px; }
-        .language-flag { width: 20px; height: 15px; margin-right: 8px; }
-        .is-warning {border-color: #ffc107 !important;}
-    </style>
+    <script>
+    function changeLanguage(lang) {
+        // Pega a URL atual e adiciona/substitui o parâmetro lang
+        const url = new URL(window.location);
+        url.searchParams.set('lang', lang);
+        window.location.href = url.toString();
+    }
+
+    // Detectar idioma atual e atualizar UI
+    document.addEventListener('DOMContentLoaded', function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const currentLang = urlParams.get('lang') || 'pt'; // Padrão PT
+        
+        // Atualizar flag e texto
+        const flagElement = document.getElementById('currentFlag');
+        const langElement = document.getElementById('currentLang');
+        
+        if (currentLang === 'en') {
+            flagElement.textContent = '🇺🇸';
+            langElement.textContent = 'EN';
+            document.getElementById('lang-en').classList.add('active');
+            document.getElementById('lang-pt').classList.remove('active');
+        } else {
+            flagElement.textContent = '🇧🇷';
+            langElement.textContent = 'PT';
+            document.getElementById('lang-pt').classList.add('active');
+            document.getElementById('lang-en').classList.remove('active');
+        }
+        
+        // ✨ NOVA FUNCIONALIDADE: Interceptar links e formulários para manter o idioma
+        if (currentLang && currentLang !== 'pt') { // Só adiciona se não for o padrão
+            // Interceptar cliques em links
+            document.addEventListener('click', function(e) {
+                const link = e.target.closest('a');
+                if (link && link.href && !link.href.includes('javascript:') && !link.href.includes('#')) {
+                    const url = new URL(link.href);
+                    if (!url.searchParams.has('lang')) {
+                        url.searchParams.set('lang', currentLang);
+                        link.href = url.toString();
+                    }
+                }
+            });
+            
+            // Interceptar submissão de formulários GET
+            document.addEventListener('submit', function(e) {
+                const form = e.target;
+                if (form.method.toLowerCase() === 'get') {
+                    // Verificar se já não tem input lang
+                    const existingLangInput = form.querySelector('input[name="lang"]');
+                    if (!existingLangInput) {
+                        const langInput = document.createElement('input');
+                        langInput.type = 'hidden';
+                        langInput.name = 'lang';
+                        langInput.value = currentLang;
+                        form.appendChild(langInput);
+                    }
+                }
+            });
+        }
+    });
+    </script>
+
 </head>
 <body class="bg-light">
 
@@ -86,15 +139,6 @@
                         <span th:text="#{nav.alertas}">Alertas</span>
                     </a>
                 </li>
-                <!-- <li class="nav-item">
-                    <a class="nav-link" th:href="@{/admin/relatorio-regional}"
-                       th:classappend="${activeMenu == 'mairipora' ? 'active' : ''}"
-                       th:title="#{nav.regiao.mairipora.tooltip}">
-                        <i class="bi bi-map me-1"></i>
-                        <span th:text="#{nav.regiao.mairipora}">Região Mairiporã</span>
-                    </a>
-                </li> -->
-                
                 <li class="nav-item">
                     <a class="nav-link" th:classappend="${activeMenu == 'notificacoes' ? 'active' : ''}"
                          th:href="@{/admin/notificacoes}" title="Notificações">
@@ -118,7 +162,7 @@
                            href="javascript:void(0)"
                            onclick="changeLanguage('pt')"
                            id="lang-pt">
-                            🇧🇷 <span th:text="#{nav.idioma.portugues}">Português</span>
+                            🇧🇷 <span>Português</span>
                         </a>
                     </li>
                     <li>
@@ -126,7 +170,7 @@
                            href="javascript:void(0)"
                            onclick="changeLanguage('en')"
                            id="lang-en">
-                            🇺🇸 <span th:text="#{nav.idioma.ingles}">English</span>
+                            🇺🇸 <span>English</span>
                         </a>
                     </li>
                 </ul>
@@ -205,37 +249,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Custom JS -->
 <script th:src="@{/js/main.js}"></script>
-
-<script>
-function changeLanguage(lang) {
-    // Pega a URL atual e adiciona/substitui o parâmetro lang
-    const url = new URL(window.location);
-    url.searchParams.set('lang', lang);
-    window.location.href = url.toString();
-}
-
-// Detectar idioma atual e atualizar UI
-document.addEventListener('DOMContentLoaded', function() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const currentLang = urlParams.get('lang') || 'pt'; // Padrão PT
-    
-    // Atualizar flag e texto
-    const flagElement = document.getElementById('currentFlag');
-    const langElement = document.getElementById('currentLang');
-    
-    if (currentLang === 'en') {
-        flagElement.textContent = '🇺🇸';
-        langElement.textContent = 'EN';
-        document.getElementById('lang-en').classList.add('active');
-        document.getElementById('lang-pt').classList.remove('active');
-    } else {
-        flagElement.textContent = '🇧🇷';
-        langElement.textContent = 'PT';
-        document.getElementById('lang-pt').classList.add('active');
-        document.getElementById('lang-en').classList.remove('active');
-    }
-});
-</script>
 
 <!-- JavaScript específico da página -->
 <th:block layout:fragment="page-scripts"></th:block>
