@@ -17,19 +17,20 @@ public class InternationalizationConfig implements WebMvcConfigurer {
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
         // Português brasileiro como padrão (contexto do projeto em Mairiporã)
-        slr.setDefaultLocale(new Locale("pt", "BR"));
+        slr.setDefaultLocale(Locale.forLanguageTag("pt-BR"));
         return slr;
     }
 
     @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
-        lci.setParamName("lang");
+        lci.setParamName("lang"); // Parâmetro que será usado para mudar o idioma
         return lci;
     }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        // ✅ IMPORTANTE: Registrar o interceptor para funcionar
         registry.addInterceptor(localeChangeInterceptor());
     }
 }

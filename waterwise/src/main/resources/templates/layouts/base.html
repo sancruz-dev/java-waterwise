@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" th:href="@{/assets/brand/waterwise-icone.png}">
     <title layout:title-pattern="$CONTENT_TITLE - WaterWise"></title>
     <meta name="description" content="Sistema de prevenção a enchentes">
 
@@ -58,7 +59,7 @@
                        th:classappend="${activeMenu == 'propriedades' ? 'active' : ''}"
                        title="Gerenciar propriedades rurais">
                         <i class="bi bi-geo-alt me-1"></i>
-                        <span>Propriedades Rurais</span>
+                        <span th:text="#{nav.propriedades}"></span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -95,20 +96,30 @@
                 </li>
             </ul>
 
-            <!-- Seletor de idioma -->
+            <!-- Seletor de idioma SIMPLIFICADO -->
             <div class="dropdown me-3">
                 <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button"
                         data-bs-toggle="dropdown" aria-label="Idioma">
                     <i class="bi bi-translate me-1"></i>
-                    <span class="language-flag">🇧🇷</span>
-                    <span>PT</span>
+                    <span class="language-flag" id="currentFlag">🇧🇷</span>
+                    <span id="currentLang">PT</span>
                 </button>
                 <ul class="dropdown-menu">
                     <li>
-                        <a class="dropdown-item active" href="#">🇧🇷 Português</a>
+                        <a class="dropdown-item" 
+                           href="javascript:void(0)"
+                           onclick="changeLanguage('pt')"
+                           id="lang-pt">
+                            🇧🇷 Português
+                        </a>
                     </li>
                     <li>
-                        <a class="dropdown-item" href="#">🇺🇸 English</a>
+                        <a class="dropdown-item" 
+                           href="javascript:void(0)"
+                           onclick="changeLanguage('en')"
+                           id="lang-en">
+                            🇺🇸 English
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -186,6 +197,37 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Custom JS -->
 <script th:src="@{/js/main.js}"></script>
+
+<script>
+function changeLanguage(lang) {
+    // Pega a URL atual e adiciona/substitui o parâmetro lang
+    const url = new URL(window.location);
+    url.searchParams.set('lang', lang);
+    window.location.href = url.toString();
+}
+
+// Detectar idioma atual e atualizar UI
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentLang = urlParams.get('lang') || 'pt'; // Padrão PT
+    
+    // Atualizar flag e texto
+    const flagElement = document.getElementById('currentFlag');
+    const langElement = document.getElementById('currentLang');
+    
+    if (currentLang === 'en') {
+        flagElement.textContent = '🇺🇸';
+        langElement.textContent = 'EN';
+        document.getElementById('lang-en').classList.add('active');
+        document.getElementById('lang-pt').classList.remove('active');
+    } else {
+        flagElement.textContent = '🇧🇷';
+        langElement.textContent = 'PT';
+        document.getElementById('lang-pt').classList.add('active');
+        document.getElementById('lang-en').classList.remove('active');
+    }
+});
+</script>
 
 <!-- JavaScript específico da página -->
 <th:block layout:fragment="page-scripts"></th:block>
