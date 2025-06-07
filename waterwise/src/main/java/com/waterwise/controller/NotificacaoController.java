@@ -23,6 +23,7 @@ public class NotificacaoController {
         List<Map<String, Object>> lista = new ArrayList<>(notificacoes);
         Collections.reverse(lista); // Mais recentes primeiro
 
+        model.addAttribute("activeMenu", "notificacoes");
         model.addAttribute("notificacoes", lista);
         model.addAttribute("total", notificacoes.size());
 
@@ -101,8 +102,7 @@ public class NotificacaoController {
                 "INFO",
                 "🧪 Teste do Sistema",
                 "Notificação de teste gerada manualmente",
-                "TESTE"
-        );
+                "TESTE");
         return ResponseEntity.ok("Notificação de teste criada!");
     }
 }

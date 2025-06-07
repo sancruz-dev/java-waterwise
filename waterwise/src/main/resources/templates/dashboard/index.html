@@ -4,7 +4,7 @@
       layout:decorate="~{layouts/base}">
 
 <head>
-    <title>Dashboard</title>
+    <title th:text="#{nav.dashboard}">Dashboard</title>
 </head>
 
 <div layout:fragment="content">
@@ -14,18 +14,10 @@
             <h1 class="h2 text-primary">
                 <i class="bi bi-speedometer2 me-2"></i>
                 <span th:text="#{dashboard.titulo}">Dashboard de Monitoramento WaterWise</span>
-
-                <!-- Dashboard de Monitoramento WaterWise -->
             </h1>
-            <p class="text-muted">
+            <p class="text-muted" th:text="#{dashboard.descricao}">
                 Visão geral do sistema de prevenção a enchentes em Mairiporã-SP
             </p>
-            <small class="text-success">
-                <i class="bi bi-check-circle me-1"></i>
-                Sistema operacional -
-                Última atualização:
-                <span th:text="${#temporals.format(#temporals.createNow(), 'HH:mm')}">14:30</span>
-            </small>
         </div>
     </div>
 
@@ -36,9 +28,9 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="card-title text-white-50 mb-1">Total de Propriedades</h6>
+                            <h6 class="card-title text-white-50 mb-1" th:text="#{dashboard.total.propriedades}">Total de Propriedades</h6>
                             <h2 class="display-6 mb-0 fw-bold" th:text="${estatisticas.totalPropriedades ?: 0}">0</h2>
-                            <small class="text-white-50">Monitoradas</small>
+                            <small class="text-white-50" th:text="#{dashboard.monitoradas}">Monitoradas</small>
                         </div>
                         <i class="bi bi-geo-alt display-6 text-white opacity-25"></i>
                     </div>
@@ -51,9 +43,9 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="card-title text-white-50 mb-1">Propriedades Ativas</h6>
+                            <h6 class="card-title text-white-50 mb-1" th:text="#{dashboard.propriedades.ativas}">Propriedades Ativas</h6>
                             <h2 class="display-6 mb-0 fw-bold" th:text="${estatisticas.propriedadesAtivas ?: 0}">0</h2>
-                            <small class="text-white-50">Ativo</small>
+                            <small class="text-white-50" th:text="#{dashboard.ativo}">Ativo</small>
                         </div>
                         <i class="bi bi-check-circle display-6 text-white opacity-25"></i>
                     </div>
@@ -66,9 +58,9 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="card-title text-white-50 mb-1">Sensores Ativos</h6>
+                            <h6 class="card-title text-white-50 mb-1" th:text="#{dashboard.sensores.ativos}">Sensores Ativos</h6>
                             <h2 class="display-6 mb-0 fw-bold" th:text="${estatisticas.sensoresAtivos ?: 0}">0</h2>
-                            <small class="text-white-50">Sensores IoT</small>
+                            <small class="text-white-50" th:text="#{dashboard.sensores.iot}">Sensores IoT</small>
                         </div>
                         <i class="bi bi-cpu display-6 text-white opacity-25"></i>
                     </div>
@@ -81,10 +73,10 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="card-title text-white-50 mb-1">Capacidade Média</h6>
+                            <h6 class="card-title text-white-50 mb-1" th:text="#{dashboard.capacidade.media}">Capacidade Média</h6>
                             <h2 class="display-6 mb-0 fw-bold"
                                 th:text="|${#numbers.formatDecimal(estatisticas.capacidadeAbsorcaoMedia ?: 0, 1, 1)}%|">0.0%</h2>
-                            <small class="text-white-50">Absorção Hídrica</small>
+                            <small class="text-white-50" th:text="#{dashboard.absorcao.hidrica}">Absorção Hídrica</small>
                         </div>
                         <i class="bi bi-droplet-half display-6 text-white opacity-25"></i>
                     </div>
@@ -95,12 +87,12 @@
 
     <!-- Top 5 Propriedades -->
     <div class="row">
-        <div class="col-lg-8 mb-4">
+        <div class="mb-4">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-0 pb-0">
                     <h5 class="card-title mb-0 text-primary">
                         <i class="bi bi-trophy text-warning me-2"></i>
-                        Top 5 Propriedades - Melhor Capacidade de Absorção Hídrica
+                        <span th:text="#{dashboard.top5.propriedades}">Top 5 Propriedades - Melhor Capacidade de Absorção Hídrica</span>
                     </h5>
                 </div>
                 <div class="card-body">
@@ -109,11 +101,11 @@
                             <thead class="table-light">
                             <tr>
                                 <th class="text-center">Pos.</th>
-                                <th>Nome da Propriedade</th>
-                                <th class="text-center">Área (ha)</th>
-                                <th class="text-center">Sensores</th>
-                                <th class="text-center">Capacidade</th>
-                                <th class="text-center">Ações</th>
+                                <th th:text="#{propriedades.nome}">Nome da Propriedade</th>
+                                <th class="text-center" th:text="#{propriedades.area.ha}">Área (ha)</th>
+                                <th class="text-center" th:text="#{propriedades.sensores}">Sensores</th>
+                                <th class="text-center" th:text="#{capacidade}">Capacidade</th>
+                                <th class="text-center" th:text="#{propriedades.acoes}">Ações</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -125,7 +117,8 @@
                                     <div>
                                         <strong th:text="${prop.nomePropriedade}">Fazenda Exemplo</strong>
                                         <br>
-                                        <small class="text-muted" th:text="${prop.tipoSolo ?: 'Não informado'}">Latossolo</small>
+                                        <small class="text-muted" th:text="${prop.tipoSolo}" th:if="${prop.tipoSolo}">Latossolo</small>
+                                        <small class="text-muted" th:text="#{msg.nao.informado}" th:if="!${prop.tipoSolo}">Latossolo</small>
                                     </div>
                                 </td>
                                 <td class="text-center">
@@ -165,55 +158,16 @@
             </div>
         </div>
 
-        <!-- Sidebar - Informações do Sistema -->
-        <div class="col-lg-4 mb-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-header bg-white border-0 pb-0">
-                    <h5 class="card-title mb-0 text-primary">
-                        <i class="bi bi-info-circle text-info me-2"></i>
-                        Status do Sistema
-                    </h5>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <h6 class="text-muted mb-2">
-                            <i class="bi bi-pin-map me-1"></i>
-                            Região de Mairiporã
-                        </h6>
-                        <p class="small text-muted mb-2">
-                            Município com 26 áreas oficiais de risco de enchentes urbanas
-                        </p>
-                        <div class="d-flex justify-content-between">
-                            <span class="small">Propriedades monitoradas na região:</span>
-                            <strong th:text="${estatisticas.regiaoMairipora ?: 0}">0</strong>
-                        </div>
-                    </div>
-
-                    <hr>
-
-                    <div class="text-center">
-                        <p class="small text-muted mb-2">
-                            <i class="bi bi-shield-check text-success me-1"></i>
-                            Sistema operacional
-                        </p>
-                        <button onclick="location.reload()" class="btn btn-outline-primary btn-sm">
-                            <i class="bi bi-arrow-clockwise me-1"></i>
-                            Atualizar dados
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Ações Rápidas -->
-    <div class="row">
+    <!-- <div class="row">
         <div class="col-12">
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white border-0">
                     <h5 class="card-title mb-0 text-primary">
                         <i class="bi bi-lightning text-warning me-2"></i>
-                        Ações Rápidas
+                        <span th:text="#{dashboard.acoes.rapidas}">Ações Rápidas</span>
                     </h5>
                 </div>
                 <div class="card-body">
@@ -222,8 +176,8 @@
                             <a th:href="@{/admin/propriedades/novo}" class="btn btn-success w-100 py-3">
                                 <i class="bi bi-plus-circle me-2"></i>
                                 <div>
-                                    Nova Propriedade Rural
-                                    <br><small>Gerenciamento de propriedades rurais monitoradas</small>
+                                    <span th:text="#{propriedades.nova}">Nova Propriedade Rural</span>
+                                    <br><small th:text="#{propriedades.gerenciamento}">Gerenciamento de propriedades rurais monitoradas</small>
                                 </div>
                             </a>
                         </div>
@@ -232,7 +186,7 @@
                                 <i class="bi bi-list me-2"></i>
                                 <div>
                                     Listar Propriedades
-                                    <br><small>Lista de Propriedades Rurais</small>
+                                    <br><small th:text="#{propriedades.titulo}">Lista de Propriedades Rurais</small>
                                 </div>
                             </a>
                         </div>
@@ -240,8 +194,8 @@
                             <a th:href="@{/admin/relatorio-ia}" class="btn btn-info w-100 py-3">
                                 <i class="bi bi-robot me-2"></i>
                                 <div>
-                                    Relatório de IA
-                                    <br><small>Análises automáticas para otimização da retenção hídrica</small>
+                                    <span th:text="#{nav.relatorio.ia}">Relatório de IA</span>
+                                    <br><small th:text="#{ia.descricao}">Análises automáticas para otimização da retenção hídrica</small>
                                 </div>
                             </a>
                         </div>
@@ -249,8 +203,8 @@
                             <a th:href="@{/admin/propriedades/regiao/mairipora}" class="btn btn-outline-secondary w-100 py-3">
                                 <i class="bi bi-map me-2"></i>
                                 <div>
-                                    Região de Mairiporã
-                                    <br><small>Propriedades monitoradas na região</small>
+                                    <span th:text="#{nav.regiao.mairipora}">Região de Mairiporã</span>
+                                    <br><small th:text="#{dashboard.sistema.propriedades.monitoradas.regiao}">Propriedades monitoradas na região</small>
                                 </div>
                             </a>
                         </div>
@@ -258,7 +212,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 </div>
 
 </html>
