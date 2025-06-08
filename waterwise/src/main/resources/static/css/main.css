@@ -576,7 +576,8 @@ p {
 
 /* ========== NAVBAR DARK ========== */
 .navbar {
-    background: var(--waterwise-background) !important;
+    background: #000000b0 !important;
+    backdrop-filter: blur(6px);
     border-bottom: 1px solid var(--waterwise-border);
     backdrop-filter: blur(10px);
     padding: var(--spacing-md) 0;
