@@ -2,7 +2,7 @@
 
 /* ========== BASE LAYOUT - CSS ESPECÍFICO ========== */
 
-/* Navbar Moderna */
+/* Navbar Específico */
 .navbar-waterwise {
     background: var(--waterwise-background) !important;
     border-bottom: 1px solid var(--waterwise-border);
@@ -72,6 +72,18 @@
 .navbar-nav-modern .nav-link i {
     margin-right: var(--spacing-xs);
     font-size: 0.875rem;
+}
+
+.navbar-nav-modern .nav-link.active::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: var(--spacing-xs);
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background: var(--waterwise-primary);
+    border-radius: 50%;
 }
 
 /* Dropdown do Idioma */
@@ -314,6 +326,7 @@
 .footer-link:hover {
     color: var(--waterwise-primary);
     text-decoration: none;
+    transform: translateY(-1px);
 }
 
 .footer-version {
@@ -335,38 +348,6 @@
 
 .navbar-toggler-icon {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2800, 255, 204, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-}
-
-/* Breadcrumb Moderno */
-.breadcrumb-modern {
-    background: rgba(0, 255, 204, 0.1);
-    border: 1px solid rgba(0, 255, 204, 0.2);
-    border-radius: var(--border-radius-md);
-    padding: var(--spacing-md) var(--spacing-lg);
-    margin-bottom: var(--spacing-lg);
-}
-
-.breadcrumb-modern .breadcrumb {
-    margin: 0;
-    background: none;
-    padding: 0;
-}
-
-.breadcrumb-modern .breadcrumb-item a {
-    color: var(--waterwise-primary);
-    text-decoration: none;
-    font-weight: 500;
-    transition: var(--transition-fast);
-}
-
-.breadcrumb-modern .breadcrumb-item a:hover {
-    color: var(--waterwise-text);
-    text-decoration: underline;
-}
-
-.breadcrumb-modern .breadcrumb-item.active {
-    color: var(--waterwise-text-secondary);
-    font-weight: 600;
 }
 
 /* Responsividade */
@@ -418,7 +399,7 @@
     }
 }
 
-/* Animações */
+/* Animações específicas do layout */
 @keyframes slideInDown {
     from {
         opacity: 0;
@@ -444,30 +425,9 @@
     outline-offset: 2px;
 }
 
-/* Estados ativos melhorados */
-.navbar-nav-modern .nav-link.active {
-    position: relative;
-}
-
-.navbar-nav-modern .nav-link.active::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    right: var(--spacing-xs);
-    transform: translateY(-50%);
-    width: 4px;
-    height: 4px;
-    background: var(--waterwise-primary);
-    border-radius: 50%;
-}
-
-/* Hover effects para desktop */
+/* Hover effects específicos para desktop */
 @media (hover: hover) {
     .navbar-brand-modern:hover .navbar-brand-icon {
         animation: pulse 1s infinite;
-    }
-    
-    .footer-link:hover {
-        transform: translateY(-1px);
     }
 }

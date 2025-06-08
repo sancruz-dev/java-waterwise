@@ -31,21 +31,11 @@
     z-index: 1;
     width: 100%;
     max-width: 700px;
-    background: var(--gradient-card);
-    border: 1px solid var(--waterwise-border);
-    border-radius: var(--border-radius-lg);
-    box-shadow: var(--shadow-lg);
-    backdrop-filter: blur(20px);
-    overflow: hidden;
     animation: fadeInUp 0.8s ease-out;
 }
 
 /* Header */
 .profile-header {
-    background: var(--gradient-primary);
-    color: var(--waterwise-background);
-    text-align: center;
-    padding: var(--spacing-2xl);
     position: relative;
     overflow: hidden;
 }
@@ -78,15 +68,15 @@
 .welcome-message {
     opacity: 0.9;
     font-size: 0.95rem;
-    margin-bottom: var(--spacing-xs);
-    color: var(--waterwise-card);
+    margin-bottom: var(--spacing-x  s);
+    color: #ccc;
 }
 
 .welcome-subtitle {
     opacity: 0.75;
     font-size: 0.875rem;
     font-weight: 300;
-    color: var(--waterwise-card);
+    color: #fff;
 }
 
 /* Seção de Progresso */
@@ -184,15 +174,6 @@
     margin-bottom: var(--spacing-lg);
 }
 
-.input-icon {
-    position: absolute;
-    left: var(--spacing-lg);
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--waterwise-text-secondary);
-    z-index: 2;
-}
-
 .form-control-modern {
     background: var(--waterwise-card);
     border: 1px solid var(--waterwise-border);
@@ -220,15 +201,6 @@
 .form-control-modern.is-invalid {
     border-color: var(--waterwise-danger);
     box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.3);
-}
-
-.invalid-feedback {
-    color: var(--waterwise-danger);
-    font-size: 0.875rem;
-    margin-top: var(--spacing-sm);
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
 }
 
 /* Email Verificado */
@@ -451,11 +423,6 @@
     animation: shimmer 1.5s infinite;
 }
 
-@keyframes shimmer {
-    0% { transform: translateX(-100%); }
-    100% { transform: translateX(200%); }
-}
-
 /* Responsivo */
 @media (max-width: 768px) {
     .profile-container {
@@ -530,76 +497,5 @@
         flex-direction: column;
         text-align: center;
         gap: var(--spacing-sm);
-    }
-}
-
-/* Animações específicas */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
-}
-
-/* Estados de foco melhorados */
-.form-control-modern:focus + .input-icon {
-    color: var(--waterwise-primary);
-}
-
-/* Melhorias de acessibilidade */
-.btn-complete:focus,
-.btn-secondary-modern:focus {
-    outline: 3px solid rgba(0, 255, 204, 0.5);
-    outline-offset: 2px;
-}
-
-/* Estados hover para mobile */
-@media (hover: hover) {
-    .input-group-modern:hover .form-control-modern {
-        border-color: var(--waterwise-primary);
-    }
-    
-    .input-group-modern:hover .input-icon {
-        color: var(--waterwise-primary);
-    }
-}
-
-/* Melhorias para Desktop */
-@media (min-width: 1200px) {
-    .profile-card {
-        max-width: 800px;
-    }
-    
-    .form-body {
-        padding: var(--spacing-2xl) 3rem;
-    }
-    
-    .profile-header {
-        padding: var(--spacing-2xl) 3rem;
-    }
-    
-    .input-group-modern {
-        margin-bottom: var(--spacing-xl);
-    }
-}
-
-@media (min-width: 992px) and (max-width: 1199px) {
-    .profile-card {
-        max-width: 750px;
     }
 }
