@@ -155,6 +155,26 @@
     font-weight: 600;
     font-size: 0.8rem;
 }
+/* form actions */
+.form-actions {
+    background: var(--gradient-card);
+    border: 1px solid var(--waterwise-border);
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--spacing-lg);
+}
+
+.actions-left,
+.actions-right {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+}
 
 /* Tipos de sensores */
 .sensor-types {
@@ -496,10 +516,6 @@
 
 /* Layout para impressão */
 @media print {
-    .form-sidebar,
-    .form-actions {
-        display: none !important;
-    }
     
     .form-container {
         grid-template-columns: 1fr;
