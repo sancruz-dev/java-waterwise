@@ -132,14 +132,6 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/admin/alertas}"
-                       th:classappend="${activeMenu == 'alertas' ? 'active' : ''}"
-                       th:title="#{nav.alertas.tooltip}">
-                        <i class="bi bi-exclamation-triangle me-1"></i>
-                        <span th:text="#{nav.alertas}">Alertas</span>
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a class="nav-link" th:classappend="${activeMenu == 'notificacoes' ? 'active' : ''}"
                          th:href="@{/admin/notificacoes}" title="Notificações">
                         <i class="bi bi-bell me-1"></i>
@@ -188,10 +180,16 @@
                     <li><a class="dropdown-item" href="#" th:text="#{nav.usuario.perfil}">Perfil</a></li>
                     <li><a class="dropdown-item" href="#" th:text="#{nav.usuario.configuracoes}">Configurações</a></li>
                     <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" th:href="@{/logout}">
-                        <i class="bi bi-box-arrow-right me-1"></i>
-                        <span th:text="#{nav.usuario.sair}">Sair</span>
-                    </a></li>
+                    <li>
+                        <form th:action="@{/logout}" method="post" class="d-inline">
+                            <button type="submit" class="dropdown-item border-0 bg-transparent w-100 text-start p-0">
+                                <span class="dropdown-item">
+                                    <i class="bi bi-box-arrow-right me-1"></i>
+                                    <span th:text="#{nav.usuario.sair}">Sair</span>
+                                </span>
+                            </button>
+                        </form>
+                    </li>
                 </ul>
             </div>
         </div>

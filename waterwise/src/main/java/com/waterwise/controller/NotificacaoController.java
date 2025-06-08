@@ -42,6 +42,10 @@ public class NotificacaoController {
         response.put("total", notificacoes.size());
         response.put("novas", contarNovas());
 
+        // ✨ NOVAS ESTATÍSTICAS PARA .NET
+        response.put("totalSensores", contarPorOrigem("DOTNET_SENSOR"));
+        response.put("totalCriticas", contarPorTipo("DANGER"));
+
         return ResponseEntity.ok(response);
     }
 
@@ -52,7 +56,7 @@ public class NotificacaoController {
         notificacao.put("tipo", tipo); // SUCCESS, WARNING, DANGER, INFO
         notificacao.put("titulo", titulo);
         notificacao.put("mensagem", mensagem);
-        notificacao.put("origem", origem); // SENSOR, ALERTA, SISTEMA
+        notificacao.put("origem", origem); // SENSOR, ALERTA, SISTEMA, DOTNET_SENSOR, DOTNET_API
         notificacao.put("timestamp", LocalDateTime.now());
         notificacao.put("lida", false);
         notificacao.put("timeFormatted", LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM HH:mm")));
@@ -91,6 +95,20 @@ public class NotificacaoController {
     private long contarNovas() {
         return notificacoes.stream()
                 .mapToLong(n -> (Boolean) n.get("lida") ? 0 : 1)
+                .sum();
+    }
+
+    // 🔢 CONTAR POR ORIGEM
+    private long contarPorOrigem(String origem) {
+        return notificacoes.stream()
+                .mapToLong(n -> origem.equals(n.get("origem")) ? 1 : 0)
+                .sum();
+    }
+
+    // 🔢 CONTAR POR TIPO
+    private long contarPorTipo(String tipo) {
+        return notificacoes.stream()
+                .mapToLong(n -> tipo.equals(n.get("tipo")) ? 1 : 0)
                 .sum();
     }
 

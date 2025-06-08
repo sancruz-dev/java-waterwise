@@ -13,17 +13,28 @@ import org.springframework.context.annotation.Configuration;
 @ConditionalOnProperty(name = "rabbitmq.enabled", havingValue = "true", matchIfMissing = false)
 public class RabbitConfig {
 
+    // ===== CONFIGURAÇÕES EXISTENTES (MANTIDAS) =====
     // Exchange
     public static final String WATERWISE_EXCHANGE = "waterwise.exchange";
 
-    // Queues
+    // Queues existentes
     public static final String PROPRIEDADE_QUEUE = "waterwise.propriedade.queue";
     public static final String ALERTA_QUEUE = "waterwise.alerta.queue";
 
-    // Routing Keys
+    // Routing Keys existentes
     public static final String PROPRIEDADE_CREATED_KEY = "propriedade.created";
     public static final String ALERTA_GENERATED_KEY = "alerta.generated";
 
+    // ===== NOVAS CONFIGURAÇÕES PARA INTEGRAÇÃO .NET =====
+    // Novas filas para receber dados do .NET
+    public static final String SENSOR_DATA_QUEUE = "waterwise.sensor.data";
+    public static final String DOTNET_ALERTS_QUEUE = "waterwise.dotnet.alerts";
+
+    // Novas routing keys para dados do .NET
+    public static final String SENSOR_DATA_KEY = "sensor.data.*";
+    public static final String DOTNET_ALERTS_KEY = "alerts.*";
+
+    // ===== BEANS EXISTENTES (MANTIDOS) =====
     @Bean
     public TopicExchange waterWiseExchange() {
         return new TopicExchange(WATERWISE_EXCHANGE);
@@ -55,6 +66,47 @@ public class RabbitConfig {
                 .with(ALERTA_GENERATED_KEY);
     }
 
+    // ===== NOVOS BEANS PARA INTEGRAÇÃO .NET =====
+
+    /**
+     * Fila para receber dados de sensores do .NET
+     */
+    @Bean
+    public Queue sensorDataQueue() {
+        return QueueBuilder.durable(SENSOR_DATA_QUEUE).build();
+    }
+
+    /**
+     * Fila para receber alertas do .NET
+     */
+    @Bean
+    public Queue dotnetAlertsQueue() {
+        return QueueBuilder.durable(DOTNET_ALERTS_QUEUE).build();
+    }
+
+    /**
+     * Binding para dados de sensores vindos do .NET
+     */
+    @Bean
+    public Binding sensorDataBinding() {
+        return BindingBuilder
+                .bind(sensorDataQueue())
+                .to(waterWiseExchange())
+                .with(SENSOR_DATA_KEY);
+    }
+
+    /**
+     * Binding para alertas vindos do .NET
+     */
+    @Bean
+    public Binding dotnetAlertsBinding() {
+        return BindingBuilder
+                .bind(dotnetAlertsQueue())
+                .to(waterWiseExchange())
+                .with(DOTNET_ALERTS_KEY);
+    }
+
+    // ===== BEANS COMPARTILHADOS (MANTIDOS) =====
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
@@ -72,6 +124,12 @@ public class RabbitConfig {
         SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setMessageConverter(messageConverter());
+
+        // Configurações adicionais para o consumer
+        factory.setConcurrentConsumers(1);
+        factory.setMaxConcurrentConsumers(5);
+        factory.setPrefetchCount(10);
+
         return factory;
     }
 }

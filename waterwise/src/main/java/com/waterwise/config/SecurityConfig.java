@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -24,34 +25,38 @@ public class SecurityConfig {
         public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
                 http
                                 .authorizeHttpRequests(authz -> authz
-                                                // Páginas públicas
-                                                .requestMatchers("/", "/login", "/error", "/css/**", "/js/**",
-                                                                "/images/**", "/assets/**")
+                                                // Páginas públicas - ADICIONAR os novos endpoints de logout
+                                                .requestMatchers("/", "/login", "/logout", "/logout-complete",
+                                                                "/logout-simple", "/logout-select-account",
+                                                                "/force-logout", "/logout-status",
+                                                                "/error", "/css/**", "/js/**", "/images/**",
+                                                                "/assets/**")
                                                 .permitAll()
 
                                                 // ✅ IMPORTANTE: Permitir acesso aos endpoints de internacionalização
                                                 .requestMatchers("/locale/**", "/api/locale/**").permitAll()
 
-                                                // Página de completar perfil - deve estar autenticado mas não
-                                                // necessariamente com perfil completo
+                                                // Página de completar perfil
                                                 .requestMatchers("/complete-profile").authenticated()
 
-                                                // Páginas administrativas - requer autenticação completa
+                                                // Páginas administrativas
                                                 .requestMatchers("/admin/**").authenticated()
 
                                                 // Outras páginas
                                                 .anyRequest().permitAll())
                                 .oauth2Login(oauth -> oauth
                                                 .loginPage("/login")
-                                                .successHandler(oauth2SuccessHandler) // ✅ Usando handler personalizado
+                                                .successHandler(oauth2SuccessHandler)
                                                 .failureUrl("/login?error=oauth2-failed")
                                                 .userInfoEndpoint(userInfo -> userInfo
                                                                 .userService(customOAuth2UserService)))
                                 .logout(logout -> logout
                                                 .logoutUrl("/logout")
-                                                .logoutSuccessUrl("/")
+                                                .logoutSuccessUrl("/login?logout=success")
                                                 .invalidateHttpSession(true)
-                                                .deleteCookies("JSESSIONID")
+                                                .clearAuthentication(true)
+                                                .deleteCookies("JSESSIONID", "OAUTH2_AUTHORIZATION_REQUEST",
+                                                                "OAUTH2_AUTHORIZATION_REQUEST_STATE")
                                                 .permitAll())
                                 .csrf(csrf -> csrf.disable());
 
