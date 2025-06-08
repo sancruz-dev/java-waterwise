@@ -80,7 +80,7 @@
 <nav class="navbar navbar-expand-lg navbar-waterwise">
     <div class="container-fluid">
         <a class="navbar-brand-modern" th:href="@{/admin/dashboard}" th:title="#{app.descricao}">
-            <span th:text="#{app.nome} + ' Admin'">WaterWise Admin</span>
+            W<span style="color: #00FFCC;">A</span>TER W<span style="color: #00FFCC;">I</span>SE ADMIN
         </a>
 
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -160,33 +160,12 @@
             </div>
 
             <!-- User menu -->
-            <div class="dropdown user-dropdown">
-                <button class="btn dropdown-toggle" type="button"
-                        data-bs-toggle="dropdown" th:aria-label="#{nav.usuario.menu}">
-                    <i class="bi bi-person"></i>
-                    <span th:text="#{nav.usuario.admin}">Admin</span>
+            <form th:action="@{/logout}" method="post" class="logout-form">
+                <button type="submit" class="logout-btn">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span th:text="#{nav.usuario.sair}">Sair</span>
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end">
-                    <li><h6 class="dropdown-header" th:text="#{nav.usuario.bem.vindo}">Bem-vindo</h6></li>
-                    <li><a class="dropdown-item" href="#" th:text="#{nav.usuario.perfil}">
-                        <i class="bi bi-person-circle"></i>
-                        <span>Perfil</span>
-                    </a></li>
-                    <li><a class="dropdown-item" href="#" th:text="#{nav.usuario.configuracoes}">
-                        <i class="bi bi-gear"></i>
-                        <span>Configurações</span>
-                    </a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li>
-                        <form th:action="@{/logout}" method="post" class="logout-form">
-                            <button type="submit" class="logout-btn">
-                                <i class="bi bi-box-arrow-right"></i>
-                                <span th:text="#{nav.usuario.sair}">Sair</span>
-                            </button>
-                        </form>
-                    </li>
-                </ul>
-            </div>
+            </form>
         </div>
     </div>
 </nav>

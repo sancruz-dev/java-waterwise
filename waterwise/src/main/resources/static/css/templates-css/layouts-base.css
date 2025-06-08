@@ -4,7 +4,6 @@
 
 /* Navbar Específico */
 .navbar-waterwise {
-    background: var(--waterwise-background) !important;
     border-bottom: 1px solid var(--waterwise-border);
     backdrop-filter: blur(20px);
     padding: var(--spacing-md) 0;
@@ -20,7 +19,7 @@
     font-size: 1.5rem;
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
+    margin-right: 1rem;
     transition: var(--transition-fast);
     text-decoration: none;
 }
@@ -191,11 +190,11 @@
     margin: var(--spacing-sm) 0;
 }
 
-.user-dropdown .logout-form {
+.logout-form {
     margin: 0;
 }
 
-.user-dropdown .logout-btn {
+.logout-btn {
     background: none;
     border: none;
     color: var(--waterwise-danger);
@@ -209,7 +208,7 @@
     gap: var(--spacing-sm);
 }
 
-.user-dropdown .logout-btn:hover {
+.logout-btn:hover {
     background: rgba(244, 67, 54, 0.1);
     color: var(--waterwise-danger);
 }
