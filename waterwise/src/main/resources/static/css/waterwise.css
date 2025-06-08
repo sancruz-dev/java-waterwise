@@ -6,37 +6,36 @@
 
 /* ========== VARIÁVEIS CSS ========== */
 :root {
-    /* Cores Principais WaterWise */
-    --waterwise-primary: #0dcaf0;
-    --waterwise-secondary: #6c757d;
-    --waterwise-success: #198754;
-    --waterwise-info: #81c784;
-    --waterwise-warning: #ffc107;
-    --waterwise-danger: #dc3545;
+  /* --waterwise-primary: #00FFCC;
+  --waterwise-background: #1A1A1A;
+  --waterwise-card: #2D2D2D;
+  --waterwise-text: #FFFFFF;
+  --waterwise-border: #3D3D3D;
+  --waterwise-1: #666666;
+  --waterwise-2: #888888;
+  --waterwise-3: #28a745;
+  --waterwise-4: #2E8B57;
+  --waterwise-5: #ffc107;
+  --waterwise-6: #dc3545; 
+  --waterwise-7: #CCCCCC;  */
 
-    /* Cores Temáticas (Água/Natureza) */
-    --water-blue: #4fc3f7;
-    --water-deep: #0dcaf0;
-    --nature-green: #4caf50;
-    --soil-brown: #8d6e63;
-    --sky-light: #e3f2fd;
 
-    /* Gradientes WaterWise */
-    --gradient-water: linear-gradient(135deg, #4fc3f7 0%, #1976d2 100%);
-    --gradient-nature: linear-gradient(135deg, #66bb6a 0%, #2e7d32 100%);
-    --gradient-earth: linear-gradient(135deg, #a1887f 0%, #5d4037 100%);
-    --gradient-sky: linear-gradient(135deg, #81c784 0%, #42a5f5 100%);
+  /* Gradientes WaterWise */
+  --gradient-water: linear-gradient(135deg, #00FFCC 0%, #2D2D2D 100%);
+  --gradient-nature: linear-gradient(135deg, #28a745 0%, #2E8B57 100%);
+  --gradient-earth: linear-gradient(135deg, #888888 0%, #666666 100%);
+  --gradient-sky: linear-gradient(135deg, #28a745 0%, #00FFCC 100%);
 
-    /* Sombras */
-    --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    --shadow-md: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-    --shadow-water: 0 0.5rem 1rem rgba(79, 195, 247, 0.3);
+  /* Sombras */
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --shadow-md: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  --shadow-water: 0 0.5rem 1rem rgba(79, 195, 247, 0.3);
 
-    /* Transições */
-    --transition-fast: 0.15s ease;
-    --transition-normal: 0.3s ease;
-    --transition-slow: 0.5s ease;
+  /* Transições */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
 }
 
 /* Classes do Bootstrap */
@@ -47,8 +46,8 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #f8f9fa;
+    color: #fff;
+    background-color: #1A1A1A;
 }
 
 

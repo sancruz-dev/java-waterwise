@@ -1,0 +1,796 @@
+/*
+ * WaterWise - Sistema de Design Unificado
+ * Baseado no design do React Native para sincronização entre plataformas
+ * Versão 2.0.0 - 2025
+ */
+
+/* ========== RESET E TIPOGRAFIA ========== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    line-height: 1.6;
+    color: #FFFFFF;
+    background: #1A1A1A;
+    font-size: 16px;
+    font-weight: 400;
+    overflow-x: hidden;
+}
+
+/* ========== VARIÁVEIS CSS UNIFICADAS ========== */
+:root {
+    /* Cores Principais - Baseadas no React Native */
+    --waterwise-primary: #00FFCC;
+    --waterwise-background: #1A1A1A;
+    --waterwise-card: #2D2D2D;
+    --waterwise-text: #FFFFFF;
+    --waterwise-text-secondary: #CCCCCC;
+    --waterwise-text-muted: #888888;
+    --waterwise-border: #3D3D3D;
+    --waterwise-border-light: #4D4D4D;
+    
+    /* Status Colors */
+    --waterwise-success: #4CAF50;
+    --waterwise-warning: #FF9800;
+    --waterwise-danger: #F44336;
+    --waterwise-info: #2196F3;
+    
+    /* Gradientes */
+    --gradient-primary: linear-gradient(135deg, #00FFCC 0%, #00D4AA 100%);
+    --gradient-background: linear-gradient(180deg, #1A1A1A 0%, #2D2D2D 50%, #1A1A1A 100%);
+    --gradient-card: linear-gradient(135deg, #2D2D2D 0%, #3D3D3D 100%);
+    
+    /* Sombras */
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.2);
+    --shadow-primary: 0 4px 12px rgba(0, 255, 204, 0.3);
+    
+    /* Transições */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.3s ease;
+    --transition-slow: 0.5s ease;
+    
+    /* Bordas */
+    --border-radius-sm: 8px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 20px;
+    
+    /* Espaçamentos */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+}
+
+/* ========== LAYOUT GLOBAL ========== */
+html, body {
+    height: 100%;
+    background: var(--waterwise-background);
+}
+
+body {
+    background: var(--gradient-background);
+    min-height: 100vh;
+}
+
+.container-fluid, .container {
+    background: transparent;
+}
+
+/* ========== TIPOGRAFIA APRIMORADA ========== */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--waterwise-text);
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: var(--spacing-md);
+}
+
+h1 { font-size: 2.5rem; font-weight: 700; }
+h2 { font-size: 2rem; font-weight: 600; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1.1rem; }
+
+p {
+    color: var(--waterwise-text-secondary);
+    margin-bottom: var(--spacing-md);
+}
+
+.text-primary { color: var(--waterwise-primary) !important; }
+.text-secondary { color: var(--waterwise-text-secondary) !important; }
+.text-muted { color: var(--waterwise-text-muted) !important; }
+.text-success { color: var(--waterwise-success) !important; }
+.text-warning { color: var(--waterwise-warning) !important; }
+.text-danger { color: var(--waterwise-danger) !important; }
+.text-info { color: var(--waterwise-info) !important; }
+.text-white { color: var(--waterwise-text) !important; }
+
+/* ========== CARDS MODERNOS ========== */
+.card {
+    background: var(--gradient-card);
+    border: 1px solid var(--waterwise-border);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
+    transition: var(--transition-normal);
+    overflow: hidden;
+    color: var(--waterwise-text);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+    background: transparent;
+    border-bottom: 1px solid var(--waterwise-border);
+    padding: var(--spacing-lg);
+    color: var(--waterwise-text);
+}
+
+.card-body {
+    padding: var(--spacing-lg);
+    color: var(--waterwise-text);
+}
+
+.card-footer {
+    background: rgba(0, 0, 0, 0.1);
+    border-top: 1px solid var(--waterwise-border);
+    padding: var(--spacing-lg);
+    color: var(--waterwise-text-secondary);
+}
+
+/* Cards Especiais */
+.card-auth {
+    background: var(--gradient-card);
+    border: 1px solid var(--waterwise-border);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(10px);
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.card-auth .card-header {
+    background: var(--gradient-primary);
+    color: var(--waterwise-background);
+    text-align: center;
+    border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    padding: var(--spacing-2xl);
+}
+
+/* ========== BOTÕES UNIFICADOS ========== */
+.btn {
+    border-radius: var(--border-radius-md);
+    font-weight: 600;
+    font-size: 16px;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: none;
+    transition: var(--transition-fast);
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.btn:focus {
+    box-shadow: 0 0 0 3px rgba(0, 255, 204, 0.3);
+    outline: none;
+}
+
+/* Botão Primário */
+.btn-primary {
+    background: var(--gradient-primary);
+    color: var(--waterwise-background);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #00D4AA 0%, #00B894 100%);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-primary);
+    color: var(--waterwise-background);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Botão Secundário */
+.btn-secondary {
+    background: var(--waterwise-card);
+    color: var(--waterwise-text);
+    border: 1px solid var(--waterwise-border);
+}
+
+.btn-secondary:hover {
+    background: var(--waterwise-border);
+    color: var(--waterwise-text);
+    transform: translateY(-1px);
+}
+
+/* Botão Outline */
+.btn-outline-primary {
+    background: transparent;
+    color: var(--waterwise-primary);
+    border: 1px solid var(--waterwise-primary);
+}
+
+.btn-outline-primary:hover {
+    background: var(--waterwise-primary);
+    color: var(--waterwise-background);
+}
+
+/* Botão de Sucesso */
+.btn-success {
+    background: linear-gradient(135deg, var(--waterwise-success) 0%, #388E3C 100%);
+    color: white;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #388E3C 0%, #2E7D32 100%);
+    transform: translateY(-1px);
+    color: white;
+}
+
+/* Botão de Perigo */
+.btn-danger {
+    background: linear-gradient(135deg, var(--waterwise-danger) 0%, #D32F2F 100%);
+    color: white;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #D32F2F 0%, #C62828 100%);
+    transform: translateY(-1px);
+    color: white;
+}
+
+/* Botão Google */
+.btn-google {
+    background: linear-gradient(135deg, #4285f4 0%, #357ae8 100%);
+    color: white;
+    font-weight: 500;
+    padding: var(--spacing-lg) var(--spacing-xl);
+    font-size: 18px;
+}
+
+.btn-google:hover {
+    background: linear-gradient(135deg, #357ae8 0%, #3367d6 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(66, 133, 244, 0.3);
+    color: white;
+}
+
+/* Tamanhos de Botão */
+.btn-lg {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    font-size: 18px;
+    border-radius: var(--border-radius-lg);
+}
+
+.btn-sm {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 14px;
+    border-radius: var(--border-radius-sm);
+}
+
+/* Estados de Botão */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* ========== FORMULÁRIOS MODERNOS ========== */
+.form-control, .form-select {
+    background: var(--waterwise-card);
+    border: 1px solid var(--waterwise-border);
+    border-radius: var(--border-radius-md);
+    color: var(--waterwise-text);
+    padding: var(--spacing-md) var(--spacing-lg);
+    font-size: 16px;
+    transition: var(--transition-fast);
+    height: 56px;
+}
+
+.form-control:focus, .form-select:focus {
+    background: var(--waterwise-card);
+    border-color: var(--waterwise-primary);
+    box-shadow: 0 0 0 3px rgba(0, 255, 204, 0.3);
+    color: var(--waterwise-text);
+}
+
+.form-control::placeholder {
+    color: var(--waterwise-text-muted);
+}
+
+.form-label {
+    color: var(--waterwise-text);
+    font-weight: 500;
+    margin-bottom: var(--spacing-sm);
+    font-size: 14px;
+}
+
+/* Input Groups */
+.input-group {
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+}
+
+.input-group-text {
+    background: var(--waterwise-border);
+    border: 1px solid var(--waterwise-border);
+    color: var(--waterwise-text-secondary);
+}
+
+/* Estados de Validação */
+.form-control.is-valid {
+    border-color: var(--waterwise-success);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+}
+
+.form-control.is-invalid {
+    border-color: var(--waterwise-danger);
+    box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.3);
+}
+
+.valid-feedback {
+    color: var(--waterwise-success);
+}
+
+.invalid-feedback {
+    color: var(--waterwise-danger);
+}
+
+/* ========== NAVBAR DARK ========== */
+.navbar {
+    background: var(--waterwise-background) !important;
+    border-bottom: 1px solid var(--waterwise-border);
+    backdrop-filter: blur(10px);
+    padding: var(--spacing-md) 0;
+}
+
+.navbar-brand {
+    color: var(--waterwise-text) !important;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    color: var(--waterwise-text-secondary) !important;
+    padding: var(--spacing-sm) var(--spacing-md) !important;
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-fast);
+    margin: 0 var(--spacing-xs);
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: var(--waterwise-primary) !important;
+    background: rgba(0, 255, 204, 0.1);
+}
+
+/* ========== ALERTAS MODERNOS ========== */
+.alert {
+    border: none;
+    border-radius: var(--border-radius-md);
+    border-left: 4px solid;
+    padding: var(--spacing-lg);
+    margin-bottom: var(--spacing-lg);
+    backdrop-filter: blur(10px);
+}
+
+.alert-success {
+    background: rgba(76, 175, 80, 0.1);
+    border-left-color: var(--waterwise-success);
+    color: var(--waterwise-success);
+}
+
+.alert-danger {
+    background: rgba(244, 67, 54, 0.1);
+    border-left-color: var(--waterwise-danger);
+    color: var(--waterwise-danger);
+}
+
+.alert-warning {
+    background: rgba(255, 152, 0, 0.1);
+    border-left-color: var(--waterwise-warning);
+    color: var(--waterwise-warning);
+}
+
+.alert-info {
+    background: rgba(33, 150, 243, 0.1);
+    border-left-color: var(--waterwise-info);
+    color: var(--waterwise-info);
+}
+
+/* ========== BADGES E INDICADORES ========== */
+.badge {
+    border-radius: var(--border-radius-sm);
+    font-weight: 600;
+    padding: 0.5em 0.75em;
+    font-size: 0.75rem;
+}
+
+.badge.bg-primary {
+    background: var(--waterwise-primary) !important;
+    color: var(--waterwise-background);
+}
+
+.badge.bg-success {
+    background: var(--waterwise-success) !important;
+}
+
+.badge.bg-warning {
+    background: var(--waterwise-warning) !important;
+    color: var(--waterwise-background);
+}
+
+.badge.bg-danger {
+    background: var(--waterwise-danger) !important;
+}
+
+.badge.bg-info {
+    background: var(--waterwise-info) !important;
+}
+
+/* ========== PROGRESS BARS ========== */
+.progress {
+    background: var(--waterwise-border);
+    border-radius: var(--border-radius-sm);
+    height: 8px;
+}
+
+.progress-bar {
+    background: var(--gradient-primary);
+    border-radius: var(--border-radius-sm);
+    transition: var(--transition-normal);
+}
+
+/* ========== MODAIS ========== */
+.modal-content {
+    background: var(--waterwise-card);
+    border: 1px solid var(--waterwise-border);
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    color: var(--waterwise-text);
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--waterwise-border);
+    background: transparent;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--waterwise-border);
+    background: transparent;
+}
+
+.modal-title {
+    color: var(--waterwise-text);
+}
+
+.btn-close {
+    filter: invert(1);
+}
+
+/* ========== TABELAS ========== */
+tbody td {
+    background-color: transparent !important;
+}
+
+.table {
+    color: var(--waterwise-text);
+    background: transparent;
+}
+
+.table th {
+    border-top: none;
+    border-bottom: 1px solid var(--waterwise-border);
+    color: var(--waterwise-text);
+    font-weight: 600;
+    background: var(--waterwise-card);
+}
+
+.table td {
+    border-top: 1px solid var(--waterwise-border);
+    color: var(--waterwise-text-secondary);
+}
+
+.table-hover tbody tr:hover {
+    background: rgba(0, 255, 204, 0.05);
+    color: var(--waterwise-text);
+}
+
+/* ========== DROPDOWN ========== */
+.dropdown-menu {
+    background: var(--waterwise-card);
+    border: 1px solid var(--waterwise-border);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-lg);
+    color: var(--waterwise-text);
+}
+
+.dropdown-item {
+    color: var(--waterwise-text-secondary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-sm);
+    margin: 2px var(--spacing-sm);
+    transition: var(--transition-fast);
+}
+
+.dropdown-item:hover {
+    background: rgba(0, 255, 204, 0.1);
+    color: var(--waterwise-primary);
+}
+
+/* ========== BREADCRUMB ========== */
+.breadcrumb {
+    background: rgba(0, 255, 204, 0.1);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+}
+
+.breadcrumb-item a {
+    color: var(--waterwise-primary);
+    text-decoration: none;
+}
+
+.breadcrumb-item.active {
+    color: var(--waterwise-text-secondary);
+}
+
+/* ========== UTILITÁRIOS ========== */
+.bg-primary {
+    background: var(--waterwise-primary) !important;
+    color: var(--waterwise-background) !important;
+}
+
+.bg-secondary {
+    background: var(--waterwise-card) !important;
+    color: var(--waterwise-text) !important;
+}
+
+.bg-success {
+    background: var(--waterwise-success) !important;
+    color: white !important;
+}
+
+.bg-warning {
+    background: var(--waterwise-warning) !important;
+    color: var(--waterwise-background) !important;
+}
+
+.bg-danger {
+    background: var(--waterwise-danger) !important;
+    color: white !important;
+}
+
+.bg-info {
+    background: var(--waterwise-info) !important;
+    color: white !important;
+}
+
+.bg-dark {
+    background: var(--waterwise-background) !important;
+    color: var(--waterwise-text) !important;
+}
+
+.bg-light {
+    background: var(--waterwise-card) !important;
+    color: var(--waterwise-text) !important;
+}
+
+/* Classes de Border Radius */
+.rounded-sm { border-radius: var(--border-radius-sm) !important; }
+.rounded-md { border-radius: var(--border-radius-md) !important; }
+.rounded-lg { border-radius: var(--border-radius-lg) !important; }
+.rounded-xl { border-radius: var(--border-radius-xl) !important; }
+
+/* Classes de Sombra */
+.shadow-sm { box-shadow: var(--shadow-sm) !important; }
+.shadow-md { box-shadow: var(--shadow-md) !important; }
+.shadow-lg { box-shadow: var(--shadow-lg) !important; }
+
+/* ========== ANIMAÇÕES ========== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-slide-in {
+    animation: slideInLeft 0.6s ease-out;
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+/* ========== LOADING STATES ========== */
+.spinner-border {
+    border-color: var(--waterwise-primary);
+    border-right-color: transparent;
+}
+
+.loading-skeleton {
+    background: linear-gradient(90deg, var(--waterwise-card) 25%, var(--waterwise-border) 50%, var(--waterwise-card) 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ========== COMPONENTES ESPECÍFICOS ========== */
+
+/* Logo WaterWise */
+.waterwise-logo {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    letter-spacing: -0.025em;
+}
+
+.waterwise-logo .regular {
+    color: var(--waterwise-text);
+}
+
+.waterwise-logo .highlight {
+    color: var(--waterwise-primary);
+}
+
+/* Status Indicators */
+.status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--border-radius-xl);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-indicator.online {
+    background: rgba(76, 175, 80, 0.1);
+    color: var(--waterwise-success);
+}
+
+.status-indicator.offline {
+    background: rgba(244, 67, 54, 0.1);
+    color: var(--waterwise-danger);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+/* Gesture/Interaction States */
+.interactive:hover {
+    transform: translateY(-2px);
+    transition: var(--transition-fast);
+}
+
+.interactive:active {
+    transform: translateY(0);
+    transition: var(--transition-fast);
+}
+
+/* ========== RESPONSIVIDADE ========== */
+@media (max-width: 768px) {
+    :root {
+        --spacing-lg: 16px;
+        --spacing-xl: 24px;
+        --spacing-2xl: 32px;
+    }
+    
+    .btn {
+        padding: var(--spacing-md) var(--spacing-lg);
+        font-size: 16px;
+    }
+    
+    .btn-lg {
+        padding: var(--spacing-lg) var(--spacing-xl);
+        font-size: 16px;
+    }
+    
+    .card-auth {
+        margin: var(--spacing-md);
+        max-width: none;
+    }
+    
+    .card-auth .card-header {
+        padding: var(--spacing-xl);
+    }
+    
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.75rem; }
+    h3 { font-size: 1.5rem; }
+    
+    .form-control, .form-select {
+        height: 52px;
+        font-size: 16px; /* Evita zoom em iOS */
+    }
+}
+
+@media (max-width: 576px) {
+    .card-body {
+        padding: var(--spacing-md);
+    }
+    
+    .card-header {
+        padding: var(--spacing-md);
+    }
+    
+    .btn {
+        font-size: 14px;
+    }
+}
+
+/* ========== DARK MODE (Nativo) ========== */
+@media (prefers-color-scheme: dark) {
+    /* O tema já é dark por padrão, mas pode ser ajustado aqui se necessário */
+}
+
+/* ========== PRINT ========== */
+@media print {
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .card {
+        border: 1px solid #ddd !important;
+        box-shadow: none !important;
+        background: white !important;
+        color: black !important;
+    }
+    
+    .btn, .navbar, .modal {
+        display: none !important;
+    }
+}
