@@ -73,7 +73,7 @@
 
     <!-- Seletor de Propriedade -->
     <div class="card border-0 shadow-sm mb-4">
-        <div class="card-header bg-white border-0">
+        <div class="card-header border-0">
             <h5 class="card-title mb-0">
                 <i class="bi bi-filter text-primary me-2"></i>
                 Selecione uma propriedade para análise
@@ -135,7 +135,7 @@
                     <div th:if="${relatorioIA != null and !#strings.isEmpty(relatorioIA)}"
                          class="relatorio-ia-content"
                          th:utext="${#strings.replace(#strings.replace(relatorioIA, '\\n', '<br>'), '**', '<strong>')}"
-                         style="color: #333; line-height: 1.8; font-size: 1rem;">
+                         style="color: #fff; line-height: 1.8; font-size: 1rem;">
                         <!-- Conteúdo da análise de IA será inserido aqui -->
                     </div>
                     <div th:if="${relatorioIA == null or #strings.isEmpty(relatorioIA)}"
@@ -174,7 +174,7 @@
         <div class="col-lg-4">
             <!-- Informações da Propriedade -->
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white border-0">
+                <div class="card-header border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-geo-alt text-success me-2"></i>
                         Informações Básicas
@@ -213,7 +213,7 @@
 
             <!-- Status da IA -->
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white border-0">
+                <div class="card-header border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-cpu text-info me-2"></i>
                         Status da IA
@@ -237,7 +237,7 @@
 
             <!-- Ações Recomendadas -->
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0">
+                <div class="card-header border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-lightbulb text-warning me-2"></i>
                         Ações Rápidas

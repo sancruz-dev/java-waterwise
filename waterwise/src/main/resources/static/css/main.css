@@ -354,6 +354,67 @@ p {
     color: var(--waterwise-danger);
 }
 
+/* ========== breadcrumb ========== */
+
+.breadcrumb-container {
+    margin-bottom: var(--spacing-lg);
+}
+
+.breadcrumb-modern {
+    background: rgba(0, 255, 204, 0.1);
+    border: 1px solid rgba(0, 255, 204, 0.2);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-md) var(--spacing-lg);
+    margin: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.breadcrumb-modern .breadcrumb-item {
+    display: flex;
+    align-items: center;
+}
+
+.breadcrumb-modern .breadcrumb-item + .breadcrumb-item::before {
+    content: ">";
+    color: var(--waterwise-text-secondary);
+    margin: 0 var(--spacing-sm);
+    font-weight: 600;
+}
+
+.breadcrumb-modern .breadcrumb-item a {
+    color: var(--waterwise-primary);
+    text-decoration: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    transition: var(--transition-fast);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--border-radius-sm);
+}
+
+.breadcrumb-modern .breadcrumb-item a:hover {
+    color: var(--waterwise-text);
+    background: rgba(0, 255, 204, 0.1);
+    transform: translateY(-1px);
+}
+
+.breadcrumb-modern .breadcrumb-item.active {
+    color: var(--waterwise-text-secondary);
+    font-weight: 600;
+    padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.breadcrumb-modern .breadcrumb-item a i {
+    font-size: 0.875rem;
+}
+
+.breadcrumb-modern .breadcrumb-item a span {
+    white-space: nowrap;
+}
+
 /* ========== NAVBAR DARK ========== */
 .navbar {
     background: var(--waterwise-background) !important;
@@ -768,6 +829,33 @@ tbody td {
     
     .btn {
         font-size: 14px;
+    }
+    
+    .breadcrumb-modern {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--spacing-xs);
+    }
+    
+    .breadcrumb-modern .breadcrumb-item {
+        width: 100%;
+    }
+    
+    .breadcrumb-modern .breadcrumb-item + .breadcrumb-item::before {
+        content: "↓";
+        margin: var(--spacing-xs) 0;
+        align-self: flex-start;
+    }
+    
+    .breadcrumb-modern .breadcrumb-item a {
+        justify-content: flex-start;
+        width: 100%;
+        padding: var(--spacing-sm);
+    }
+    
+    .breadcrumb-modern .breadcrumb-item a span {
+        font-size: 0.8rem;
+        margin-top: 2px;
     }
 }
 

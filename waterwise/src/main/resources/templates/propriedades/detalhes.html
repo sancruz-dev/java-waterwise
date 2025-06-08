@@ -12,13 +12,29 @@
     <!-- Page Header -->
     <div class="row mb-4">
         <div class="col">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/admin/dashboard}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a th:href="@{/admin/propriedades}">Propriedades Rurais</a></li>
-                    <li class="breadcrumb-item active" th:text="${propriedade.nomePropriedade}">Fazenda Verde</li>
-                </ol>
-            </nav>
+            
+            <div class="breadcrumb-container">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb-modern">
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/admin/dashboard}">
+                                <i class="bi bi-speedometer2"></i>
+                                <span th:text="#{nav.dashboard}">Dashboard</span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a th:href="@{/admin/propriedades}">
+                                <i class="bi bi-geo-alt"></i>
+                                <span th:text="#{nav.propriedades}">Propriedades Rurais</span>
+                            </a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            <span th:text="${propriedade.nomePropriedade}">Fazenda Tal</span>
+                        </li>
+                    </ol>
+                </nav>
+            </div>
+            
             <h1 class="h2 text-primary mb-1">
                 <i class="bi bi-geo-alt me-2"></i>
                 <span th:text="${propriedade.nomePropriedade}">Fazenda Verde Águas</span>
@@ -48,8 +64,8 @@
     <div class="row">
         <!-- Informações Principais -->
         <div class="col-lg-8 mb-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0">
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-header  border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-info-circle text-primary me-2"></i>
                         <span>Informações Básicas</span>
@@ -118,7 +134,7 @@
 
             <!-- Sensores da Propriedade -->
             <div class="card border-0 shadow-sm" th:if="${!#lists.isEmpty(propriedade.sensores)}">
-                <div class="card-header bg-white border-0">
+                <div class="card-header  border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-cpu text-info me-2"></i>
                         <span>Sensores IoT</span>
@@ -169,7 +185,7 @@
         <div class="col-lg-4">
             <!-- Métricas de Impacto -->
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white border-0">
+                <div class="card-header  border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-droplet text-primary me-2"></i>
                         <span>Impacto Hídrico</span>
@@ -209,7 +225,7 @@
 
             <!-- Status dos Sensores -->
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white border-0">
+                <div class="card-header  border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-activity text-success me-2"></i>
                         <span>Status e Monitoramento</span>
@@ -245,7 +261,7 @@
 
             <!-- Ações Rápidas -->
             <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white border-0">
+                <div class="card-header  border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-lightning text-warning me-2"></i>
                         <span>Ações Rápidas</span>
@@ -278,7 +294,7 @@
 
             <!-- Localização -->
             <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0">
+                <div class="card-header  border-0">
                     <h5 class="card-title mb-0">
                         <i class="bi bi-pin-map text-danger me-2"></i>
                         <span>Localização</span>
